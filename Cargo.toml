@@ -1,0 +1,20 @@
+[package]
+name = "SimpleBeatmapAnalyzer"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.release]
+lto = "fat"
+panic = 'abort'
+opt-level=3
+overflow-checks = false
+
+[dependencies]
+csv = "1.2.2"
+indicatif = "0.17.6"
+jwalk = "0.8.1"
+md-5 = "0.10.5"
+rayon = "1.7.0"
+rosu-pp = "0.9.5"

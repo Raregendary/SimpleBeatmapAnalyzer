@@ -43,7 +43,7 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 #### Method 2
 1. If in windows your default delimiter is "," and not "." open the csv with Excel
 1. Chose the menu **Insert** and from there click **Table**
-1. It should auto detect the scope of your table, if not go back to **Method 1**
+1. It should auto detect the scope of your table, if not manualy select it
 1. Enable **My table has headers** checkbox and press **Ok**
 
 ## How to analyze data in Excel
@@ -70,3 +70,11 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. Click the arrow on **DT_AR**->**Number filters**->**Equals..**
 	* On the first enter **10.33**
 1. Click the arrow on **JI**->**Sort Largest to Smallest**
+
+## To Do:
+1. Create a config file with options.
+1. Add counter for cut streams
+1. Calculate AVG jump Spacing and AVG jump Distance
+1. Option to be able to generate Osu links and Osu Direct links
+1. Expose variables as the stream distance and jump distance for editing in the config
+1. Maybe add optinal support for 1/3 or 1/6th or other uncomon Snap Divisors **(prob wont)**

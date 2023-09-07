@@ -3,7 +3,24 @@
 # What is Simple Beatmap Analyzer ?
 ###### This is my first rust program
 Simple Beatmap Analyzer is a console application that analyzes ".osu" files for Standard gamemode only. After it finishes it outputs the results in a "CSV" file in the same directory as the .exe
-
+## How does it work
+It assumes every map is in maped **1/4** and calculates streams/jumps and other patterns aswel as some ratios based on them *(Jumps are asumed every second beat and i will be refering to it as 1/2)*.
+* For **1/4** patterns we assume the circles are overlapping or up to 16 pixels edge to edge.
+* For **1/2** patterns we asume the edge to edge space is higher than 110 pixels
+1. **1\4** patterns:
+	* *Dobules/Triples/Quads/Bursts/Streams/DeathStreams*
+	* Bursts:      **3-12** *includes Triples and Quads*
+	* Streams:	**13-32**
+	* DeathStreams: **33+**
+1. **1\2** patterns:
+	* *ShortJumps/MidJumps/LongJumps*
+	* ShortJumps:  **3-12**
+	* MidJumps: **13-32**
+	* LongJumps: **33+**
+1. **SI** -> Stream index *(how streamy the map is minus jumps)*
+1. **JI** -> Jump index *(how jumpy the map is minus streams)*
+1. **FCDBI** -> Finger Control Double Bursts Index *(experimental)*
+1. Additionals stats like 99% acc PP for NM/DT/HR aswel as Stars for said mods and others... *wont list em all*
 ## How to install
 1. Click on releases and download the latest version.
 1. Unzip into a folder of your choice.

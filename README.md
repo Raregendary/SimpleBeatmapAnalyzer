@@ -1,3 +1,3 @@
-![Simple_Beatmap_Analyzer(1)](https://github.com/Raregendary/SimpleBeatmapAnalyzer/assets/71941668/169b2926-a5f1-49a7-9239-717b32a1109a)
+![Simple_Beatmap_Analyzer(2)](https://github.com/Raregendary/SimpleBeatmapAnalyzer/assets/71941668/8e3e4fe2-021f-4281-ad38-7c25224fcf90)
 
 # SimpleBeatmapAnalyzer

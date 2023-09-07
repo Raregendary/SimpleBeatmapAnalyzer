@@ -2,6 +2,14 @@
 name = "SimpleBeatmapAnalyzer"
 version = "0.9.0"
 edition = "2021"
+authors = ["Raregendary <raregendary@gmail.com>"]
+license = "MIT"
+description = "Simple program to analyze all of your osu files and save a csv with all the computed metrics"
+readme = "README.md"
+homepage = "https://github.com/Raregendary/SimpleBeatmapAnalyzer"
+repository = "https://github.com/Raregendary/SimpleBeatmapAnalyzer"
+keywords = ["osu", "streams", "bursts", "jumps", "deathstreams", "simple", "beatmap", "analyzer", "SimpleBeatmapAnalyzer", "pp", "stars", "NM", "DT", "HR"]
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -18,3 +26,6 @@ jwalk = "0.8.1"
 md-5 = "0.10.5"
 rayon = "1.7.0"
 rosu-pp = "0.9.5"
+
+[build-dependencies]
+winres = "0.1.12"

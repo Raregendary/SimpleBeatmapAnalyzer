@@ -1,4 +1,6 @@
-![Simple_Beatmap_Analyzer(2)](https://github.com/Raregendary/SimpleBeatmapAnalyzer/assets/71941668/8e3e4fe2-021f-4281-ad38-7c25224fcf90)
+![banner](https://github.com/Raregendary/SimpleBeatmapAnalyzer/assets/71941668/2ef72068-7cc7-4c05-bb12-a5ee62e84d08)
+
+
 
 # What is Simple Beatmap Analyzer?
 ###### This is my first rust program

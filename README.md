@@ -2,7 +2,7 @@
 
 # What is Simple Beatmap Analyzer?
 ###### This is my first rust program
-Simple Beatmap Analyzer is a console application that analyzes ".osu" files for Standard gamemode only. After it finishes it outputs the results in a "CSV" file in the same directory as the .exe
+Simple Beatmap Analyzer is a console application that analyzes ".osu" files for Standard game mode only. After it finishes it outputs the results in a "CSV" *(comma,separated,values)* file in the same directory as the .exe
 # Table of Contents
 1. [How does it work](#how-does-it-work)
 1. [How to install](#how-to-install)
@@ -93,8 +93,8 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 ## F.A.Q.
 1. Why does it run slow ?
 	* The program needs to search for all your ".osu" files and then parse all of them to calculate alot of metrics. Most of the time is taken by [ROSU-PP](https://github.com/MaxOhn/rosu-pp) to calculate difficulty and pp for the maps aswel as reading from the disc and parsing. This program scales very well with fast SSD storage and alot of cores *(on my r5 3600x with 860Evo ssd its 2500 maps per second)*
-1. When i load the data the numeric columns like Stars are text ?
-	* This can happen for many reasons one being wrong default delimiter in windows like numbers to be expected to use "," instead of "." . To fix it i know two ways:
+1. When i load the data in Excel the numeric columns like Stars are text ?
+	* This can happen for many reasons one being wrong default delimiter in windows. Floating point numbers would expected "," instead of "." . To fix it i know two ways:
 		* **Language Settings** -> **Region** -> **Regional format** *(English(Europe) works)*. And then reset Excel.
 		* Or in Excel you can mark the column click **Home** around the middle there is a drop down menu usualy writen **General** Switch to: **Number** then go to **Data** and click **Text to Columns** *(should be somewhere on the right)*
 ## Credits

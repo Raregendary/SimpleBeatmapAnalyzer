@@ -1,5 +1,5 @@
 use std::{collections::HashMap, error::Error};
-use rosu_pp::{beatmap::TimingPoint, SortedVec, parse::HitObject};
+use rosu_pp::{beatmap::TimingPoint, parse::HitObject};
 
 #[inline(always)]
 pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) -> Result<SongParams, Box<dyn Error>> {

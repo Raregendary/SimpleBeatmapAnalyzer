@@ -9,8 +9,8 @@ Simple Beatmap Analyzer is a console application that analyzes ".osu" files for 
 1. [How does it work](#how-does-it-work)
 1. [How to install](#how-to-install)
 1. [How to use it](#how-to-use-it)
-1. [How to load in Excel](#how-to-load-in-excel)
-1. [How to analyze data in Excel](#how-to-analyze-data-in-excel)
+1. [How to load results.csv in Excel](#how-to-load-in-excel)
+1. [How to analyze the data in Excel](#how-to-analyze-data-in-excel)
 1. [To Do](#to-do)
 1. [F.A.Q](#faq)
 
@@ -44,7 +44,7 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. Open the results.csv in Excel or any other CSV reader/analyzer
 1. After you find the map you like simply copy the **MapID** and paste it in the Osu search ingame
 
-# How to load in Excel
+# How to load results.csv in Excel
 #### Method 1
 1. Open a new excel document.
 1. Chose the menu **Data** and from there click **From Text/CSV**
@@ -58,7 +58,7 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. It should auto detect the scope of your table, if not manualy select it
 1. Enable **My table has headers** checkbox and press **Ok**
 
-# How to analyze data in Excel
+# How to analyze thedata in Excel
 #### Example 1: Most Streamy 7\*  Beatmaps from 210 to 220 BPM with more than 20% Bursts
 1.  Chose the menu **Data** and enable **Filter** if its not enabled.
 	* On the clomns you gonna see a drop down arrow
@@ -96,7 +96,7 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. Why does it run slow ?
 	* The program needs to search for all your ".osu" files and then parse all of them to calculate alot of metrics. Most of the time is taken by [ROSU-PP](https://github.com/MaxOhn/rosu-pp) to calculate difficulty and pp for the maps aswel as reading from the disc and parsing. This program scales very well with fast SSD storage and alot of cores *(on my r5 3600x with 860Evo ssd its 2500 maps per second)*
 1. When i load the data in Excel the numeric columns like Stars are text ?
-	* This can happen for many reasons one being wrong default delimiter in windows. Floating point numbers would expected "," instead of "." . To fix it i know two ways:
+	* This can happen for many reasons one being wrong default delimiter in windows. Floating point numbers would expect "," instead of "." . To fix it i know two ways:
 		* **Language Settings** -> **Region** -> **Regional format** *(English(Europe) works)*. And then reset Excel.
 		* Or in Excel you can mark the column click **Home** around the middle there is a drop down menu usualy writen **General** Switch to: **Number** then go to **Data** and click **Text to Columns** *(should be somewhere on the right)*
 ## Credits

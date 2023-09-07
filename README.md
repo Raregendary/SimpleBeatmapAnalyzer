@@ -10,6 +10,7 @@ Simple Beatmap Analyzer is a console application that analyzes ".osu" files for 
 1. [How to load in Excel](#how-to-load-in-excel)
 1. [How to analyze data in Excel](#how-to-analyze-data-in-excel)
 1. [To Do](#to-do)
+1. [F.A.Q](#faq)
 
 
 # How does it work
@@ -89,3 +90,16 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. Maybe add optinal support for 1/3 or 1/6th or other uncomon Snap Divisors **(prob wont)**
 1. Figure out a way to have an indicator if the map is ranked/loved/qualified/graveyarded
 	* That doesnt require everyone to use thier APIv1 key.
+## F.A.Q.
+1. Why does it run slow ?
+	* The program needs to search for all your ".osu" files and then parse all of them to calculate alot of metrics. Most of the time is taken by [ROSU-PP](https://github.com/MaxOhn/rosu-pp) to calculate difficulty and pp for the maps aswel as reading from the disc and parsing. This program scales very well with fast SSD storage and alot of cores *(on my r5 3600x with 860Evo ssd its 2500 maps per second)*
+1. When i load the data the numeric columns like Stars are text ?
+	* This can happen for many reasons one being wrong default delimiter in windows like numbers to be expected to use "," instead of "." . To fix it i know two ways:
+		* **Language Settings** -> **Region** -> **Regional format** *(English(Europe) works)*. And then reset Excel.
+		* Or in Excel you can mark the column click **Home** around the middle there is a drop down menu usualy writen **General** Switch to: **Number** then go to **Data** and click **Text to Columns** *(should be somewhere on the right)*
+## Credits
+[ROSU-PP](https://github.com/MaxOhn/rosu-pp) - Beatmap parsing and Difficulty/PP calculations
+## Licence
+[MIT](https://www.mit.edu/~amini/LICENSE.md)
+
+[back to the top](#what-is-simple-beatmap-analyzer)

@@ -8,7 +8,7 @@ description = "Simple program to analyze all of your osu files and save a csv wi
 readme = "README.md"
 homepage = "https://github.com/Raregendary/SimpleBeatmapAnalyzer"
 repository = "https://github.com/Raregendary/SimpleBeatmapAnalyzer"
-keywords = ["osu", "streams", "bursts", "jumps", "SimpleBeatmapAnalyzer"]
+keywords = ["osu", "streams", "Simple", "jumps", "BeatmapAnalyzer"]
 categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

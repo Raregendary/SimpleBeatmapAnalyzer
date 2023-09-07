@@ -1,9 +1,18 @@
 ![Simple_Beatmap_Analyzer(2)](https://github.com/Raregendary/SimpleBeatmapAnalyzer/assets/71941668/8e3e4fe2-021f-4281-ad38-7c25224fcf90)
 
-# What is Simple Beatmap Analyzer ?
+# What is Simple Beatmap Analyzer?
 ###### This is my first rust program
 Simple Beatmap Analyzer is a console application that analyzes ".osu" files for Standard gamemode only. After it finishes it outputs the results in a "CSV" file in the same directory as the .exe
-## How does it work
+# Table of Contents
+1. [How does it work](#how-does-it-work)
+1. [How to install](#how-to-install)
+1. [How to use it](#how-to-use-it)
+1. [How to load in Excel](#how-to-load-in-excel)
+1. [How to analyze data in Excel](#how-to-analyze-data-in-excel)
+1. [To Do](#to-do)
+
+
+# How does it work
 It assumes every map is in maped **1/4** and calculates streams/jumps and other patterns aswel as some ratios based on them *(Jumps are asumed every second beat and i will be refering to it as 1/2)*.
 * For **1/4** patterns we assume the circles are overlapping or up to 16 pixels edge to edge.
 * For **1/2** patterns we asume the edge to edge space is higher than 110 pixels
@@ -21,18 +30,18 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. **JI** -> Jump index *(how jumpy the map is minus streams)*
 1. **FCDBI** -> Finger Control Double Bursts Index *(experimental)*
 1. Additionals stats like 99% acc PP for NM/DT/HR aswel as Stars for said mods and others... *wont list em all*
-## How to install
+# How to install
 1. Click on releases and download the latest version.
 1. Unzip into a folder of your choice.
 
-## How to use it
+# How to use it
 1. Open the **SimpleBeatmapAnalyzer.exe**
 1. Paste the Osu Songs path *(example: D:\osu\Songs)* and click Enter
 1. Wait for it to finish and save the data in **results.csv**
 1. Open the results.csv in Excel or any other CSV reader/analyzer
 1. After you find the map you like simply copy the **MapID** and paste it in the Osu search ingame
 
-## How to load in Excel
+# How to load in Excel
 #### Method 1
 1. Open a new excel document.
 1. Chose the menu **Data** and from there click **From Text/CSV**
@@ -46,7 +55,7 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. It should auto detect the scope of your table, if not manualy select it
 1. Enable **My table has headers** checkbox and press **Ok**
 
-## How to analyze data in Excel
+# How to analyze data in Excel
 #### Example 1: Most Streamy 7\*  Beatmaps from 210 to 220 BPM with more than 20% Bursts
 1.  Chose the menu **Data** and enable **Filter** if its not enabled.
 	* On the clomns you gonna see a drop down arrow
@@ -71,10 +80,12 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 	* On the first enter **10.33**
 1. Click the arrow on **JI**->**Sort Largest to Smallest**
 
-## To Do:
+# To Do:
 1. Create a config file with options.
 1. Add counter for cut streams
 1. Calculate AVG jump Spacing and AVG jump Distance
 1. Option to be able to generate Osu links and Osu Direct links
 1. Expose variables as the stream distance and jump distance for editing in the config
 1. Maybe add optinal support for 1/3 or 1/6th or other uncomon Snap Divisors **(prob wont)**
+1. Figure out a way to have an indicator if the map is ranked/loved/qualified/graveyarded
+	* That doesnt require everyone to use thier APIv1 key.

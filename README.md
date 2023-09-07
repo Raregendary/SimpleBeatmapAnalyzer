@@ -58,7 +58,7 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. It should auto detect the scope of your table, if not manualy select it
 1. Enable **My table has headers** checkbox and press **Ok**
 
-# How to analyze thedata in Excel
+# How to analyze the data in Excel
 #### Example 1: Most Streamy 7\*  Beatmaps from 210 to 220 BPM with more than 20% Bursts
 1.  Chose the menu **Data** and enable **Filter** if its not enabled.
 	* On the clomns you gonna see a drop down arrow
@@ -84,7 +84,7 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. Click the arrow on **JI**->**Sort Largest to Smallest**
 
 # To Do:
-1. Create a config file with options.
+1. Create a column config file and options file.
 1. Add counter for cut streams
 1. Calculate AVG jump Spacing and AVG jump Distance
 1. Option to be able to generate Osu links and Osu Direct links
@@ -92,6 +92,7 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. Maybe add optinal support for 1/3 or 1/6th or other uncomon Snap Divisors **(prob wont)**
 1. Figure out a way to have an indicator if the map is ranked/loved/qualified/graveyarded
 	* That doesnt require everyone to use thier APIv1 key.
+1. Make it so you need to compute once the map and not every time you run the program
 ## F.A.Q.
 1. Why does it run slow ?
 	* The program needs to search for all your ".osu" files and then parse all of them to calculate alot of metrics. Most of the time is taken by [ROSU-PP](https://github.com/MaxOhn/rosu-pp) to calculate difficulty and pp for the maps aswel as reading from the disc and parsing. This program scales very well with fast SSD storage and alot of cores *(on my r5 3600x with 860Evo ssd its 2500 maps per second)*

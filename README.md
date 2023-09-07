@@ -9,8 +9,8 @@ Simple Beatmap Analyzer is a console application that analyzes ".osu" files for 
 1. [How does it work](#how-does-it-work)
 1. [How to install](#how-to-install)
 1. [How to use it](#how-to-use-it)
-1. [How to load results.csv in Excel](#how-to-load-in-excel)
-1. [How to analyze the data in Excel](#how-to-analyze-data-in-excel)
+1. [How to load results.csv in Excel](#how-to-load-resultscsv-in-excel)
+1. [How to analyze the data in Excel](#how-to-analyze-the-data-in-excel)
 1. [To Do](#to-do)
 1. [F.A.Q](#faq)
 

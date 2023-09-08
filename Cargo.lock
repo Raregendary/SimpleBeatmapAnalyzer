@@ -12,6 +12,7 @@ dependencies = [
  "md-5",
  "rayon",
  "rosu-pp",
+ "serde",
  "winres",
 ]
 

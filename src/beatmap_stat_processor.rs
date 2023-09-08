@@ -120,7 +120,7 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
         mid_jumps: n_mid as f32/length * 100.0,
         long_jumps: n_long as f32/length * 100.0,
         quads: n_quads as f32/length * 100.0,
-        fcdbi: ((n_burst-n_triples-n_quads) as f32 +(n_doubles as f32*1.75) + (n_triples as f32 * 1.5) + (n_quads as f32 * 1.5) - jump_value - (n_stream as f32 * 1.35) - (n_deathstream as f32 * 1.7)) / length,
+        fcdbi: ((n_burst-n_triples-n_quads) as f32 +(n_doubles as f32*1.75) + (n_triples as f32 * 1.5) + (n_quads as f32 * 1.75) - jump_value - (n_stream as f32 * 1.35) - (n_deathstream as f32 * 1.7)) / length,
         si: (steam_value - jump_value - (n_doubles as f32 * 0.5)) / length,
         ji: (jump_value - steam_value - (n_doubles as f32 * 0.5)) / length,
         }

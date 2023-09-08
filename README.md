@@ -17,6 +17,7 @@ Simple Beatmap Analyzer is a console application that analyzes ".osu" files for 
 
 # How does it work
 It assumes every map is in maped **1/4** and calculates streams/jumps and other patterns aswel as some ratios based on them *(Jumps are asumed every second beat and i will be refering to it as 1/2)*.
+The values for the following **1/4** and **1/2** sections are in % notes of the map, not in time.
 * For **1/4** patterns we assume the circles are overlapping or up to 16 pixels edge to edge.
 * For **1/2** patterns we asume the edge to edge space is higher than 110 pixels
 1. **1\4** patterns:
@@ -93,6 +94,8 @@ It assumes every map is in maped **1/4** and calculates streams/jumps and other 
 1. Figure out a way to have an indicator if the map is ranked/loved/qualified/graveyarded
 	* That doesnt require everyone to use thier APIv1 key.
 1. Make it so you need to compute once the map and not every time you run the program
+1. Include 100+ note stream counter 
+1. Make Longest stream counter
 ## F.A.Q.
 1. Why does it run slow ?
 	* The program needs to search for all your ".osu" files and then parse all of them to calculate alot of metrics. Most of the time is taken by [ROSU-PP](https://github.com/MaxOhn/rosu-pp) to calculate difficulty and pp for the maps aswel as reading from the disc and parsing. This program scales very well with fast SSD storage and alot of cores *(on my r5 3600x with 860Evo ssd its 2500 maps per second)*

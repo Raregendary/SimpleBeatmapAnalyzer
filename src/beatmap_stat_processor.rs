@@ -30,6 +30,9 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
     //variables after v0.9.0
     let mut longest_stream = 0;
     let mut stream100_counter =0;
+    let mut avarage_jump_speed_counter: f32 = 0.0;
+    let mut avarage_jump_distance_counter: f32 = 0.0;
+    let mut jumps_counter: u32 = 0;
     for i in xyt.iter().skip(1){
         let x = i.pos.x;
         let y = i.pos.y;
@@ -60,51 +63,59 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
         //this is a ration that if the map is 1/4th and we are in 1/4th gives us around 1 and if we are at 1/2 it gives us around 2
         let time_deviser_ratio = (start_time-time_last) / (0.25*current_bpm_ms_time);
         //here we check for streams in 1/4 from a 1/4 map and spacing less than 16 pixels edge to edge or overlaping
-        if d_r - 16.0 <= 0.0 && time_deviser_ratio > 0.9 && time_deviser_ratio < 1.1 {
-            counter_one_fourth+=1;
-        }
-        else if counter_one_fourth > 0 {
-            counter_one_fourth+=1;//adding the first element
-            if longest_stream<counter_one_fourth{
-                longest_stream = counter_one_fourth;
+        if time_deviser_ratio > 0.9 && time_deviser_ratio < 1.1 {
+            if d_r - 16.0 <= 0.0 {
+                counter_one_fourth+=1;
             }
-            if counter_one_fourth == 2 {
-                n_doubles   += 2; 
-            } else if counter_one_fourth == 3{
-                n_triples   += 3;
-                n_burst     += 3;
-            } else if counter_one_fourth == 4{
-                n_quads     += 4;
-                n_burst     += 4;
-            } else if counter_one_fourth <= 11{
-                n_burst     += counter_one_fourth;
-            }else if counter_one_fourth <= 32{
-                n_stream    += counter_one_fourth;
-            } else {
-                n_deathstream += counter_one_fourth;
-                if counter_one_fourth >= 100{
-                    stream100_counter+=1;
+            else if counter_one_fourth > 0 {
+                counter_one_fourth+=1;//adding the first element
+                if longest_stream<counter_one_fourth{
+                    longest_stream = counter_one_fourth;
                 }
-            }
-            counter_one_fourth = 0;
+                if counter_one_fourth == 2 {
+                    n_doubles   += 2; 
+                } else if counter_one_fourth == 3{
+                    n_triples   += 3;
+                    n_burst     += 3;
+                } else if counter_one_fourth == 4{
+                    n_quads     += 4;
+                    n_burst     += 4;
+                } else if counter_one_fourth <= 11{
+                    n_burst     += counter_one_fourth;
+                }else if counter_one_fourth <= 32{
+                    n_stream    += counter_one_fourth;
+                } else {
+                    n_deathstream += counter_one_fourth;
+                    if counter_one_fourth >= 100{
+                        stream100_counter+=1;
+                    }
+                }
+                counter_one_fourth = 0;
+            } 
         } 
-        // here we check for jumps in 1/2 from a 1/4th map and spacing more then 110 pixes edge to edge   
-        if d_r - 110.0 > 0.0 && time_deviser_ratio > 1.9 && time_deviser_ratio < 2.1{
-            counter_one_twoth+=1;
-        }
-        else{
-            if counter_one_twoth >= 2{
-                if counter_one_twoth <= 10{
-                    n_short += counter_one_twoth + 1;
+        else if  time_deviser_ratio > 1.9 && time_deviser_ratio < 2.1{
+            // here we check for jumps in 1/2 from a 1/4th map and spacing more then 110 pixes edge to edge      
+            if d_r - 110.0 > 0.0 {
+                counter_one_twoth+=1;
+                avarage_jump_distance_counter += d_r;
+                avarage_jump_speed_counter += (1000.0*d_r) / (start_time - time_last) as f32;
+            }  
+            else{
+                if counter_one_twoth >= 2{
+                    jumps_counter+=counter_one_twoth+1;
+                    if counter_one_twoth <= 10{
+                        n_short += counter_one_twoth + 1;
+                    }
+                    else if counter_one_twoth >= 11 && counter_one_twoth <= 31{
+                        n_mid += counter_one_twoth + 1;
+                    }
+                    else{
+                        n_long += counter_one_twoth + 1;
+                    }
                 }
-                else if counter_one_twoth >= 11 && counter_one_twoth <= 31{
-                    n_mid += counter_one_twoth + 1;
-                }
-                else{
-                    n_long += counter_one_twoth + 1;
-                }
+                counter_one_twoth = 0;
+
             }
-            counter_one_twoth = 0;
         }
         //  Asigning last elements for next iteration
         time_last=start_time;
@@ -137,6 +148,7 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
         }
     } 
     if counter_one_twoth >= 2{
+        jumps_counter+=1;
         if counter_one_twoth <= 10{
             n_short += counter_one_twoth + 1;
         }
@@ -149,6 +161,8 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
     }
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^Calculating if the patern persist till the end of the map^^^^^^^^^^^^^^^^^^^^^^^^^
     let length = xyt.len() as f32;
+    avarage_jump_speed_counter = avarage_jump_speed_counter/jumps_counter as f32; // calculating the avg for the entire map
+    avarage_jump_distance_counter = avarage_jump_distance_counter/jumps_counter as f32; // calculating the avg for the entire map
 
     let most_common_bpm = map.into_iter().max_by_key(|&(_, count)| count).map(|(val, _)| val).unwrap();
     beatmap_playable_length = ((time_last - beatmap_playable_length)/1000.0).round();
@@ -171,6 +185,8 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
         ji: (jump_value - steam_value - (n_doubles as f32 * 0.5)) / length,
         longest_stream: longest_stream,
         streams100: stream100_counter,
+        avg_jump_distance: (if avarage_jump_distance_counter.is_finite() {avarage_jump_distance_counter as u32}else{0}),
+        avg_jump_speed: (if avarage_jump_speed_counter.is_finite() {avarage_jump_speed_counter as u32} else {0}),
         }
     )
 } 
@@ -191,7 +207,9 @@ pub struct SongParams {
     pub si: f32,//Stream index
     pub ji: f32,//Jump index
     pub longest_stream: u32,
-    pub streams100: u32
+    pub streams100: u32,
+    pub avg_jump_distance: u32, // Average distance between jumps in pixels
+    pub avg_jump_speed: u32, // Average speed of jumps in ms
 }
 #[allow(dead_code)]
 #[inline(always)]

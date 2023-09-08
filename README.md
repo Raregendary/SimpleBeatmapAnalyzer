@@ -1,6 +1,6 @@
 ![banner](https://github.com/Raregendary/SimpleBeatmapAnalyzer/assets/71941668/2ef72068-7cc7-4c05-bb12-a5ee62e84d08)
 
-
+* **KNOWN BUG - LAST PATTERN OF THE MAP IS NOT BEING CALCULATED THAT WILL BE FIXED IN V0.9.1**
 
 # What is Simple Beatmap Analyzer?
 ###### This is my first rust program
@@ -87,7 +87,7 @@ The values for the following **1/4** and **1/2** sections are in % notes of the 
 # To Do:
 1. [ ] Create a column config file and options file.
 1. [ ] Add counter for cut streams
-1. [ ] Calculate AVG jump Spacing and AVG jump Distance
+1. [x] Calculate AVG jump Spacing and AVG jump Distance
 1. [ ] Option to be able to generate Osu links and Osu Direct links
 1. [ ] Expose variables as the stream distance and jump distance for editing in the config
 1. [ ] Maybe add optinal support for 1/3 or 1/6th or other uncomon Snap Divisors **(prob wont)**

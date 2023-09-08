@@ -6,83 +6,21 @@ use osufile_reader::read_osu_file;
 mod beatmap_stat_processor;
 use beatmap_stat_processor::process_stats;
 mod savedata_manager;
-use savedata_manager::{calculate_md5};
+use savedata_manager::calculate_md5;
 use jwalk::WalkDir as wd;
 use rayon::prelude::*;
 use rosu_pp::{Beatmap, BeatmapExt,GameMode};
 use std::collections::HashSet;
+use std::fs::File;
 use std::path::PathBuf;
 use std::time::Instant;
-use std::io::{self, Write};
-use serde::{Deserialize,Serialize};
+use std::io::{self, Write, BufWriter};
+mod full_data_struct;
+use full_data_struct::{FullData, FullDataEnum};
 
 use crate::savedata_manager::{read_main_data_csv, data_save_manager};
 
-#[derive(Debug, Clone,Serialize, Deserialize)]
-pub struct FullData {
-    #[serde(rename = "Title")]
-    title: String,
-    #[serde(rename = "DifName")]
-    version: String,
-    #[serde(rename = "MapID")]
-    beatmap_id: String,
-    #[serde(rename = "MapSetID")]
-    beatmap_set_id: String,
-    #[serde(rename = "CS")]
-    cs: f32,
-    #[serde(rename = "AR")]
-    ar: f32,
-    #[serde(rename = "OD")]
-    od: f32,
-    #[serde(rename = "HP")]
-    hp: f32,
-    #[serde(rename = "Stars")]
-    stars_nm: f32,
-    #[serde(rename = "DT_Stars")]
-    stars_dt: f32,
-    #[serde(rename = "HR_Stars")]
-    stars_hr: f32,
-    #[serde(rename = "NM_99")]
-    nm: f32,
-    #[serde(rename = "DT_99")]
-    dt: f32,
-    #[serde(rename = "HR_99")]
-    hr: f32,
-    #[serde(rename = "PlayableLength")]
-    playable_length: i32,
-    #[serde(rename = "BPM")]
-    bpm: i32,           // most common bpm
-    #[serde(rename = "Doubles")]
-    doubles: f32,
-    #[serde(rename = "Triples")]
-    triples: f32,
-    #[serde(rename = "Bursts")]
-    bursts: f32,        // 3-12     1/4th
-    #[serde(rename = "Streams")]
-    streams: f32,       // 13-32    1/4th
-    #[serde(rename = "DeathStreams")]
-    deathstreams: f32,  // 33+      1/4th
-    #[serde(rename = "ShortJumps")]
-    short_jumps: f32,   // 3-12     1/2th
-    #[serde(rename = "MidJumps")]
-    mid_jumps: f32,     // 13-32    1/2th
-    #[serde(rename = "Longjumps")]
-    long_jumps: f32,    // 33+      1/2th
-    #[serde(rename = "Quads")]
-    quads: f32,
-    #[serde(rename = "FCDBI")]
-    fcdbi: f32,//FINGER CONTROL DOUBLE BURSTS INDEX
-    #[serde(rename = "SI")]
-    si: f32,//Stream index
-    #[serde(rename = "JI")]
-    ji: f32,//Jump index
-    #[serde(rename = "LongestStream")]
-    longest_stream: u32,
-    #[serde(rename = "Streams100")]
-    streams100: u32, // how much 100 or higher note streams are in the map as counter
-    #[serde(rename = "MD5")]
-    md5: String,
-}
+
 #[inline(always)]
 fn find_osu_files6(path: String) -> Result<Vec<String>, io::Error> {
     println!("Searching for \".osu\" files, please be patient...");
@@ -157,6 +95,8 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
                                     ji: song.ji,
                                     longest_stream: song.longest_stream,
                                     streams100: song.streams100,
+                                    avg_jump_distance: song.avg_jump_distance,
+                                    avg_jump_speed: song.avg_jump_speed,
                                     md5: md5,
                                 });
         
@@ -183,37 +123,24 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
         println!("Wrong path");
     }
 }
-#[inline(always)]
-fn test_md5speed(songs_path:String){
-    //Try to get all the .osu files
-    if let Ok(files) = find_osu_files6(songs_path.trim().into()){
-        println!("Found {} osu beatmaps.\nProcessing Osu! Standard beatmaps:",files.len());
-        let start = Instant::now();
-        let bar = ProgressBar::new(files.len() as u64);
-        //process all the beatmaps in parallel if they are from Standard and save them in output vector.
-        let datas: Vec<String> = files.par_iter()
-            .fold(|| Vec::with_capacity(files.len()), |mut acc, path| {
-                bar.inc(1);
-                acc.push(calculate_md5(path));
-                acc
-            })
-            .flatten()
-            .collect();
-        bar.finish();
-        let duration = start.elapsed();
-        println!("Processed {} Osu! Standard beatmaps in: {:?}\t({} beatmaps per second)",datas.len(), duration,datas.len() / duration.as_millis() as usize);
-        
+use strum::IntoEnumIterator;
+fn write_enum_to_file() -> std::io::Result<()> {
+    let file = File::create("test.txt")?;
+    let mut writer = BufWriter::new(file);
+
+    for variant in FullDataEnum::iter() {
+        writeln!(writer, "{}=1", format!("{:?}", variant))?;
     }
+
+    Ok(())
 }
 fn main() {
+    write_enum_to_file().unwrap();
     let mut old_data = Vec::new(); 
     if let Ok(data) = read_main_data_csv(){
         old_data=data;
     }
-    
     let already_processed:HashSet<String> = old_data.iter().map(|item| item.md5.clone()).collect();
-    println!("{:?}",already_processed);
-    println!("{:?}",old_data.len());
     print!("Enter Osu Song path (example D:\\osu\\Songs): ");
     io::stdout().flush().unwrap();
     let mut songs_path = String::new();

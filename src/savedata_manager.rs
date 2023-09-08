@@ -77,6 +77,8 @@ fn write_main_data_csv(new_data: &[FullData],old_data: &[FullData]) -> Result<Pa
         "MapSetID",
         "LongestStream",
         "Streams100",
+        "AvgJumpsDistance",
+        "AvgJumpsSpeed",
         "MD5"
     ])?;
 
@@ -117,6 +119,8 @@ fn write_main_data_csv(new_data: &[FullData],old_data: &[FullData]) -> Result<Pa
             &combined.beatmap_set_id.to_string(),
             &combined.longest_stream.to_string(),
             &combined.streams100.to_string(),
+            &combined.avg_jump_distance.to_string(),
+            &format!("{:.2}", combined.avg_jump_speed),
             &combined.md5
         ])?;
     }
@@ -156,6 +160,8 @@ fn write_main_data_csv(new_data: &[FullData],old_data: &[FullData]) -> Result<Pa
             &combined.beatmap_set_id.to_string(),
             &combined.longest_stream.to_string(),
             &combined.streams100.to_string(),
+            &combined.avg_jump_distance.to_string(),
+            &format!("{:.2}", combined.avg_jump_speed),
             &combined.md5
         ])?;
     }

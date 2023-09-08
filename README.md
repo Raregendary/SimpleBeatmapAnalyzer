@@ -85,17 +85,17 @@ The values for the following **1/4** and **1/2** sections are in % notes of the 
 1. Click the arrow on **JI**->**Sort Largest to Smallest**
 
 # To Do:
-1. Create a column config file and options file.
-1. Add counter for cut streams
-1. Calculate AVG jump Spacing and AVG jump Distance
-1. Option to be able to generate Osu links and Osu Direct links
-1. Expose variables as the stream distance and jump distance for editing in the config
-1. Maybe add optinal support for 1/3 or 1/6th or other uncomon Snap Divisors **(prob wont)**
-1. Figure out a way to have an indicator if the map is ranked/loved/qualified/graveyarded
+1. [] Create a column config file and options file.
+1. [] Add counter for cut streams
+1. [] Calculate AVG jump Spacing and AVG jump Distance
+1. [] Option to be able to generate Osu links and Osu Direct links
+1. [] Expose variables as the stream distance and jump distance for editing in the config
+1. [] Maybe add optinal support for 1/3 or 1/6th or other uncomon Snap Divisors **(prob wont)**
+1. [] Figure out a way to have an indicator if the map is ranked/loved/qualified/graveyarded
 	* That doesnt require everyone to use thier APIv1 key.
-1. Make it so you need to compute once the map and not every time you run the program
-1. Include 100+ note stream counter 
-1. Make Longest stream counter
+1. [x] Make it so you need to compute once the map and not every time you run the program
+1. [x] Include 100+ note stream counter 
+1. [x] Make Longest stream counter
 ## F.A.Q.
 1. Why does it run slow ?
 	* The program needs to search for all your ".osu" files and then parse all of them to calculate alot of metrics. Most of the time is taken by [ROSU-PP](https://github.com/MaxOhn/rosu-pp) to calculate difficulty and pp for the maps aswel as reading from the disc and parsing. This program scales very well with fast SSD storage and alot of cores *(on my r5 3600x with 860Evo ssd its 2500 maps per second)*

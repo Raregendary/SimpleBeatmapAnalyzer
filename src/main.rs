@@ -76,6 +76,10 @@ pub struct FullData {
     si: f32,//Stream index
     #[serde(rename = "JI")]
     ji: f32,//Jump index
+    #[serde(rename = "LongestStream")]
+    longest_stream: u32,
+    #[serde(rename = "Streams100")]
+    streams100: u32, // how much 100 or higher note streams are in the map as counter
     #[serde(rename = "MD5")]
     md5: String,
 }
@@ -151,6 +155,8 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
                                     fcdbi: song.fcdbi,
                                     si: song.si,
                                     ji: song.ji,
+                                    longest_stream: song.longest_stream,
+                                    streams100: song.streams100,
                                     md5: md5,
                                 });
         

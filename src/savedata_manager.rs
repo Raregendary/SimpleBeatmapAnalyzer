@@ -75,6 +75,8 @@ fn write_main_data_csv(new_data: &[FullData],old_data: &[FullData]) -> Result<Pa
         "HR_CS",
         "Quads",
         "MapSetID",
+        "LongestStream",
+        "Streams100",
         "MD5"
     ])?;
 
@@ -113,6 +115,8 @@ fn write_main_data_csv(new_data: &[FullData],old_data: &[FullData]) -> Result<Pa
             &format!("{:.2}", (combined.cs * 1.3).min(10.0)),
             &format!("{:.2}", combined.quads),
             &combined.beatmap_set_id.to_string(),
+            &combined.longest_stream.to_string(),
+            &combined.streams100.to_string(),
             &combined.md5
         ])?;
     }
@@ -150,6 +154,8 @@ fn write_main_data_csv(new_data: &[FullData],old_data: &[FullData]) -> Result<Pa
             &format!("{:.2}", (combined.cs * 1.3).min(10.0)),
             &format!("{:.2}", combined.quads),
             &combined.beatmap_set_id.to_string(),
+            &combined.longest_stream.to_string(),
+            &combined.streams100.to_string(),
             &combined.md5
         ])?;
     }

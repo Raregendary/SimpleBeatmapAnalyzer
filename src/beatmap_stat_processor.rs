@@ -27,7 +27,9 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
         time_last = first_element.start_time;
         beatmap_playable_length = time_last;
     }
-
+    //variables after v0.9.0
+    let mut longest_stream = 0;
+    let mut stream100_counter =0;
     for i in xyt.iter().skip(1){
         let x = i.pos.x;
         let y = i.pos.y;
@@ -62,20 +64,27 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
             counter_one_fourth+=1;
         }
         else if counter_one_fourth > 0 {
-            if counter_one_fourth == 1 {
-                n_doubles   += counter_one_fourth + 1; 
-            } else if counter_one_fourth == 2{
-                n_triples   += counter_one_fourth + 1;
-                n_burst     += counter_one_fourth + 1;
+            counter_one_fourth+=1;//adding the first element
+            if longest_stream<counter_one_fourth{
+                longest_stream = counter_one_fourth;
+            }
+            if counter_one_fourth == 2 {
+                n_doubles   += 2; 
             } else if counter_one_fourth == 3{
-                n_quads     += counter_one_fourth + 1;
-                n_burst     += counter_one_fourth + 1;
-            } else if counter_one_fourth <= 10{
-                n_burst     += counter_one_fourth + 1;
-            }else if counter_one_fourth <= 31{
-                n_stream += counter_one_fourth + 1;
+                n_triples   += 3;
+                n_burst     += 3;
+            } else if counter_one_fourth == 4{
+                n_quads     += 4;
+                n_burst     += 4;
+            } else if counter_one_fourth <= 11{
+                n_burst     += counter_one_fourth;
+            }else if counter_one_fourth <= 32{
+                n_stream    += counter_one_fourth;
             } else {
-                n_deathstream += counter_one_fourth + 1;
+                n_deathstream += counter_one_fourth;
+                if counter_one_fourth >= 100{
+                    stream100_counter+=1;
+                }
             }
             counter_one_fourth = 0;
         } 
@@ -102,6 +111,43 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
         x_last = x;
         y_last = y;
     }
+    //---------------------Calculating if the patern persist till the end of the map -----------------
+    if counter_one_fourth > 0 {
+        counter_one_fourth+=1;//adding the first element
+        if longest_stream<counter_one_fourth{
+            longest_stream = counter_one_fourth;
+        }
+        if counter_one_fourth == 2 {
+            n_doubles   += 2; 
+        } else if counter_one_fourth == 3{
+            n_triples   += 3;
+            n_burst     += 3;
+        } else if counter_one_fourth == 4{
+            n_quads     += 4;
+            n_burst     += 4;
+        } else if counter_one_fourth <= 11{
+            n_burst     += counter_one_fourth;
+        }else if counter_one_fourth <= 32{
+            n_stream    += counter_one_fourth;
+        } else {
+            n_deathstream += counter_one_fourth;
+            if counter_one_fourth >= 100{
+                stream100_counter+=1;
+            }
+        }
+    } 
+    if counter_one_twoth >= 2{
+        if counter_one_twoth <= 10{
+            n_short += counter_one_twoth + 1;
+        }
+        else if counter_one_twoth >= 11 && counter_one_twoth <= 31{
+            n_mid += counter_one_twoth + 1;
+        }
+        else{
+            n_long += counter_one_twoth + 1;
+        }
+    }
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^Calculating if the patern persist till the end of the map^^^^^^^^^^^^^^^^^^^^^^^^^
     let length = xyt.len() as f32;
 
     let most_common_bpm = map.into_iter().max_by_key(|&(_, count)| count).map(|(val, _)| val).unwrap();
@@ -123,6 +169,8 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
         fcdbi: ((n_burst-n_triples-n_quads) as f32 +(n_doubles as f32*1.75) + (n_triples as f32 * 1.5) + (n_quads as f32 * 1.75) - jump_value - (n_stream as f32 * 1.35) - (n_deathstream as f32 * 1.7)) / length,
         si: (steam_value - jump_value - (n_doubles as f32 * 0.5)) / length,
         ji: (jump_value - steam_value - (n_doubles as f32 * 0.5)) / length,
+        longest_stream: longest_stream,
+        streams100: stream100_counter,
         }
     )
 } 
@@ -142,6 +190,8 @@ pub struct SongParams {
     pub fcdbi: f32,//FINGER CONTROL DOUBLE BURSTS INDEX
     pub si: f32,//Stream index
     pub ji: f32,//Jump index
+    pub longest_stream: u32,
+    pub streams100: u32
 }
 #[allow(dead_code)]
 #[inline(always)]

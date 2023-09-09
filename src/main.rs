@@ -11,15 +11,15 @@ use jwalk::WalkDir as wd;
 use rayon::prelude::*;
 use rosu_pp::{Beatmap, BeatmapExt,GameMode};
 use std::collections::HashSet;
-use std::fs::File;
 use std::path::PathBuf;
 use std::time::Instant;
 use std::io::{self, Write, BufWriter};
 mod full_data_struct;
 use full_data_struct::{FullData, FullDataEnum};
-
 use crate::savedata_manager::{read_main_data_csv, data_save_manager};
 
+mod config_manager;
+use config_manager::init_config;
 
 #[inline(always)]
 fn find_osu_files6(path: String) -> Result<Vec<String>, io::Error> {
@@ -123,19 +123,9 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
         println!("Wrong path");
     }
 }
-use strum::IntoEnumIterator;
-fn write_enum_to_file() -> std::io::Result<()> {
-    let file = File::create("test.txt")?;
-    let mut writer = BufWriter::new(file);
 
-    for variant in FullDataEnum::iter() {
-        writeln!(writer, "{}=1", format!("{:?}", variant))?;
-    }
-
-    Ok(())
-}
 fn main() {
-    write_enum_to_file().unwrap();
+    let my_vec = init_config();
     let mut old_data = Vec::new(); 
     if let Ok(data) = read_main_data_csv(){
         old_data=data;

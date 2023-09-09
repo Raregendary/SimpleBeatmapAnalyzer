@@ -1,47 +1,10 @@
+use std::str::FromStr;
+
 use serde::{Deserialize,Serialize};
 
 use strum_macros::EnumIter;
 
-#[derive(Debug,EnumIter)]
-pub enum FullDataEnum {
-    Title = 0 ,
-    DifName,
-    MapID,
-    Stars,
-    BPM,
-    Bursts,
-    Streams,
-    DeathStreams,
-    ShortJumps,
-    MidJumps,
-    Longjumps,
-    Doubles,
-    Triples,
-    SI,
-    JI, 
-    FCDBI,
-    PlayableLength,
-    CS,
-    AR,
-    OD,
-    HP,
-    NM_99,
-    DT_99,
-    HR_99,
-    DT_Stars,
-    HR_Stars,
-    DT_BPM,
-    DT_AR,
-    HR_AR,
-    HR_CS,
-    Quads,
-    MapSetID,
-    LongestStream,
-    Streams100,
-    AvgJumpsDistance,
-    AvgJumpsSpeed,
-    MD5
-}
+
 
 #[derive(Debug, Clone,Serialize, Deserialize)]
 pub struct FullData {
@@ -178,4 +141,98 @@ fn apply_dt_to_ar(original_ar: f32) -> f32 {
         ((5.0 - (ms - 1200.0) / 120.0) * 100.0).round() / 100.0
     };
     new_ar
+}
+
+
+
+
+
+
+#[derive(Debug,EnumIter)]
+pub enum FullDataEnum {
+    Title = 0 ,
+    DifName,
+    MapID,
+    Stars,
+    BPM,
+    Bursts,
+    Streams,
+    DeathStreams,
+    ShortJumps,
+    MidJumps,
+    Longjumps,
+    Doubles,
+    Triples,
+    SI,
+    JI, 
+    FCDBI,
+    PlayableLength,
+    CS,
+    AR,
+    OD,
+    HP,
+    NM_99,
+    DT_99,
+    HR_99,
+    DT_Stars,
+    HR_Stars,
+    DT_BPM,
+    DT_AR,
+    HR_AR,
+    HR_CS,
+    Quads,
+    MapSetID,
+    LongestStream,
+    Streams100,
+    AvgJumpsDistance,
+    AvgJumpsSpeed,
+    MD5
+}
+impl FromStr for FullDataEnum {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Title" => Ok(FullDataEnum::Title),
+            "DifName" => Ok(FullDataEnum::DifName),
+            "MapID" => Ok(FullDataEnum::MapID),
+            "Stars" => Ok(FullDataEnum::Stars),
+            "BPM" => Ok(FullDataEnum::BPM),
+            "Bursts" => Ok(FullDataEnum::Bursts),
+            "Streams" => Ok(FullDataEnum::Streams),
+            "DeathStreams" => Ok(FullDataEnum::DeathStreams),
+            "ShortJumps" => Ok(FullDataEnum::ShortJumps),
+            "MidJumps" => Ok(FullDataEnum::MidJumps),
+            "Longjumps" => Ok(FullDataEnum::Longjumps),
+            "Doubles" => Ok(FullDataEnum::Doubles),
+            "Triples" => Ok(FullDataEnum::Triples),
+            "SI" => Ok(FullDataEnum::SI),
+            "JI" => Ok(FullDataEnum::JI),
+            "FCDBI" => Ok(FullDataEnum::FCDBI),
+            "PlayableLength" => Ok(FullDataEnum::PlayableLength),
+            "CS" => Ok(FullDataEnum::CS),
+            "AR" => Ok(FullDataEnum::AR),
+            "OD" => Ok(FullDataEnum::OD),
+            "HP" => Ok(FullDataEnum::HP),
+            "NM_99"=>Ok(FullDataEnum::NM_99), 
+            "DT_99"=>Ok(FullDataEnum::DT_99), 
+            "HR_99"=>Ok(FullDataEnum::HR_99), 
+            "DT_Stars"=>Ok(FullDataEnum::DT_Stars), 
+            "HR_Stars"=>Ok(FullDataEnum::HR_Stars), 
+            "DT_BPM"=>Ok(FullDataEnum::DT_BPM), 
+            "DT_AR"=>Ok(FullDataEnum::DT_AR), 
+            "HR_AR"=>Ok(FullDataEnum::HR_AR), 
+            "HR_CS"=>Ok(FullDataEnum::HR_CS), 
+            "Quads"=>Ok(FullDataEnum::Quads), 
+            "MapSetID"=>Ok(FullDataEnum::MapSetID), 
+            "LongestStream"=>Ok(FullDataEnum::LongestStream), 
+            "Streams100"=>Ok(FullDataEnum::Streams100), 
+            "AvgJumpsDistance"=>Ok(FullDataEnum::AvgJumpsDistance), 
+            "AvgJumpsSpeed"=>Ok(FullDataEnum::AvgJumpsSpeed), 
+            "MD5"=>Err(()),//Always added in the end :)        ---Ok(FullDataEnum::MD5),
+
+             _=>Err(()),
+
+        }
+    }
 }

@@ -111,7 +111,7 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
             .collect();
         bar.finish();
         let duration = start.elapsed();
-        println!("Processed {} Osu! Standard beatmaps in: {:?}\t({} beatmaps per second)",new_data.len(), duration,new_data.len() / duration.as_secs() as usize);
+        println!("Processed {} Osu! Standard beatmaps in: {:?}\t({} beatmaps per second)",new_data.len(), duration,new_data.len() / duration.as_secs().max(1) as usize);
 
         if let Ok(path) = data_save_manager(&new_data,&old_data){
             println!("CSV file saved successfuly ->\t{}",path.to_str().unwrap());

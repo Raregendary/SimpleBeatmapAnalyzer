@@ -1,6 +1,5 @@
 ![banner](https://github.com/Raregendary/SimpleBeatmapAnalyzer/assets/71941668/2ef72068-7cc7-4c05-bb12-a5ee62e84d08)
 
-* **KNOWN BUG - LAST PATTERN OF THE MAP IS NOT BEING CALCULATED THAT WILL BE FIXED IN V0.9.1**
 
 # What is Simple Beatmap Analyzer?
 ###### This is my first rust program
@@ -107,5 +106,8 @@ The values for the following **1/4** and **1/2** sections are in % notes of the 
 [ROSU-PP](https://github.com/MaxOhn/rosu-pp) - Beatmap parsing and Difficulty/PP calculations
 ## Licence
 [MIT](https://www.mit.edu/~amini/LICENSE.md)
+
+## Fixed Bugs:
+1. **LAST PATTERN OF THE MAP IS NOT BEING CALCULATED => FIXED IN V0.9.1**
 
 [back to the top](#what-is-simple-beatmap-analyzer)

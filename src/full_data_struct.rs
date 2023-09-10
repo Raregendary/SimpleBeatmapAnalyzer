@@ -72,6 +72,10 @@ pub struct FullData {
     pub avg_jump_distance: u32, // Avarage jump distance in pixels from all the jumps on the map (even if 2 objects only)
     #[serde(rename = "AvgJumpsSpeed")]
     pub avg_jump_speed: u32,  // Avarage jump speed in pixels/sec from all the jumps on the map (even if 2 objects only)
+
+    //0.9.2
+    #[serde(rename = "Creator")]
+    pub creator: String,
     #[serde(rename = "MD5")]
     pub md5: String,
 }
@@ -115,10 +119,15 @@ impl FullDataTrait for FullData {
             FullDataEnum::HR_CS => format!("{:.2}", (self.cs * 1.3).min(10.0)),
             FullDataEnum::Quads => format!("{:.2}", self.quads),
             FullDataEnum::MapSetID => self.beatmap_set_id.to_string(),
+            //0.9.1
             FullDataEnum::LongestStream => self.longest_stream.to_string(),
             FullDataEnum::Streams100 => self.streams100.to_string(),
             FullDataEnum::AvgJumpsDistance => self.avg_jump_distance.to_string(),
             FullDataEnum::AvgJumpsSpeed => format!("{:.2}", self.avg_jump_speed),
+            //0.9.2
+            FullDataEnum::Creator => self.creator.to_string(),
+            FullDataEnum::OsuWebLink => if self.beatmap_id.len()>1 {format!("=HYPERLINK(\"https://osu.ppy.sh/b/{}\")", self.beatmap_id)} else { "".into()},
+            FullDataEnum::OsuDirect => if self.beatmap_id.len()>1 {format!("=HYPERLINK(\"osu://b/{}\")", self.beatmap_id)} else { "".into()},
             FullDataEnum::MD5 => self.md5.to_string(),
             
             _ => "".into(),
@@ -187,6 +196,9 @@ pub enum FullDataEnum {
     Streams100,
     AvgJumpsDistance,
     AvgJumpsSpeed,
+    Creator,
+    OsuDirect,
+    OsuWebLink,
     MD5
 }
 impl FromStr for FullDataEnum {
@@ -230,6 +242,9 @@ impl FromStr for FullDataEnum {
             "Streams100"=>Ok(FullDataEnum::Streams100), 
             "AvgJumpsDistance"=>Ok(FullDataEnum::AvgJumpsDistance), 
             "AvgJumpsSpeed"=>Ok(FullDataEnum::AvgJumpsSpeed), 
+            "Creator"=>Ok(FullDataEnum::Creator),
+            "OsuDirect"=>Ok(FullDataEnum::OsuDirect),
+            "OsuWebLink"=>Ok(FullDataEnum::OsuWebLink),
             "MD5"=>Err(()),//Always added in the end :)        ---Ok(FullDataEnum::MD5),
 
              _=>Err(()),

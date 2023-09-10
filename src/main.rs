@@ -60,7 +60,7 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
                         if map.mode == GameMode::Osu {
                             if let Ok(song) = process_stats(&map.timing_points,&map.hit_objects,map.cs){
                                 //using my function to parse title version map id and map set id because rosu pp doesnt have -_-
-                                let (title1, version1, beatmap_id1, beatmap_set_id1) = read_osu_file(path);
+                                let (title1,creator1, version1, beatmap_id1, beatmap_set_id1) = read_osu_file(path);
                                 let nm = map.pp().accuracy(99.0).calculate();
                                 let dt = map.pp().mods(64).accuracy(99.0).calculate();
                                 let hr = map.pp().mods(16).accuracy(99.0).calculate();
@@ -97,6 +97,7 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
                                     streams100: song.streams100,
                                     avg_jump_distance: song.avg_jump_distance,
                                     avg_jump_speed: song.avg_jump_speed,
+                                    creator: creator1,
                                     md5: md5,
                                 });
         

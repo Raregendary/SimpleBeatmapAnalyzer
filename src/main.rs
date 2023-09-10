@@ -44,7 +44,7 @@ fn find_osu_files6(path: String) -> Result<Vec<String>, io::Error> {
 }
 
 #[inline(always)]
-fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_data: &[FullData]){
+fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_data: &[FullData], columns_config_vec: &[FullDataEnum]){
     //Try to get all the .osu files
     if let Ok(files) = find_osu_files6(songs_path.trim().into()){
         println!("Found {} osu beatmaps.\nProcessing Osu! Standard beatmaps:",files.len());
@@ -113,7 +113,10 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
         let duration = start.elapsed();
         println!("Processed {} Osu! Standard beatmaps in: {:?}\t({} beatmaps per second)",new_data.len(), duration,new_data.len() / duration.as_secs().max(1) as usize);
 
-        if let Ok(path) = data_save_manager(&new_data,&old_data){
+        let mut merged_data = Vec::new();
+        merged_data.extend_from_slice(old_data);
+        merged_data.extend(new_data);
+        if let Ok(path) = data_save_manager(&merged_data,&columns_config_vec){
             println!("CSV file saved successfuly ->\t{}",path.to_str().unwrap());
         } else {
             println!("FAILED TO SAVE CSV FILE!!!");
@@ -125,7 +128,7 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
 }
 
 fn main() {
-    let my_vec = init_config();
+    let columns_config_vec = init_config("columns_config.txt".into());
     let mut old_data = Vec::new(); 
     if let Ok(data) = read_main_data_csv(){
         old_data=data;
@@ -137,7 +140,7 @@ fn main() {
     io::stdin()
         .read_line(&mut songs_path)
         .expect("failed to read from stdin");
-    process_beatmaps(songs_path,&already_processed,&old_data);
+    process_beatmaps(songs_path,&already_processed,&old_data,&columns_config_vec);
     end();
 }
 fn end(){

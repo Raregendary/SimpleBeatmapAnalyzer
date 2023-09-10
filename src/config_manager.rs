@@ -3,11 +3,11 @@ use crate::full_data_struct::FullDataEnum;
 use std::path::Path;
 use strum::IntoEnumIterator;
 #[inline(always)]
-pub fn init_config() -> Vec<FullDataEnum> {
-
-    let path: &Path = Path::new("columns_config.txt");
+pub fn init_config(path: String)  -> Vec<FullDataEnum> {
+//
+    let path: &Path = Path::new(&path);
     if !path.exists() {
-        if let Ok(_) = write_enum_to_file() {
+        if let Ok(_) = write_enum_to_file(path) {
             println!("Successfully created columns config file! (loading defaults)");
             println!("To change the order or hide the columns, edit the file column_config.txt and restart the program")
         }
@@ -16,12 +16,12 @@ pub fn init_config() -> Vec<FullDataEnum> {
             return get_all_enum_values();
         }
     }
-    read_config()
+    read_config(&path)
 }
 
 #[inline(always)]
-fn read_config() -> Vec<FullDataEnum> {
-    let contents = fs::read_to_string("columns_config.txt").expect("Something went wrong reading the file column_config.txt file");
+fn read_config(path: &Path) -> Vec<FullDataEnum> {
+    let contents = fs::read_to_string(&path).expect("Something went wrong reading the file column_config.txt file");
     let mut my_vec: Vec<FullDataEnum> = Vec::new();
     for line in contents.lines() {
         if !line.starts_with("/") {
@@ -41,8 +41,8 @@ fn read_config() -> Vec<FullDataEnum> {
 }
 
 #[inline(always)]
-fn write_enum_to_file() -> std::io::Result<()> {
-    let file = File::create("columns_config.txt")?;
+fn write_enum_to_file(path: &Path) -> std::io::Result<()> {
+    let file = File::create(&path)?;
     let mut writer = BufWriter::new(file);
     writeln!(writer, "//In this file you can select which columns to be displayed in results.csv")?;
     writeln!(writer, "//You can swap thier order, to disable one simply replace the 1 with 0")?;

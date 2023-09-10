@@ -76,11 +76,11 @@ pub struct FullData {
     pub md5: String,
 }
 pub trait FullDataTrait {
-    fn get_string(&self, field: FullDataEnum) -> String;
+    fn get_string(&self, field: &FullDataEnum) -> String;
 }
 
 impl FullDataTrait for FullData {
-    fn get_string(&self, field: FullDataEnum) -> String {
+    fn get_string(&self, field: &FullDataEnum) -> String {
         match field {
             FullDataEnum::Title => self.title.to_string(),
             FullDataEnum::DifName => self.version.to_string(),

@@ -84,7 +84,8 @@ The values for the following **1/4** and **1/2** sections are in % notes of the 
 1. Click the arrow on **JI**->**Sort Largest to Smallest**
 
 # To Do:
-1. [ ] Create a column config file and options file.
+1. [x] Create a column config file and options file.
+1. [ ] Create a options config file.
 1. [ ] Add counter for cut streams
 1. [x] Calculate AVG jump Spacing and AVG jump Distance
 1. [ ] Option to be able to generate Osu links and Osu Direct links

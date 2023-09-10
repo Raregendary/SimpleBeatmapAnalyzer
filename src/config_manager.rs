@@ -35,7 +35,6 @@ fn read_config(path: &Path) -> Vec<FullDataEnum> {
         }
     }
     my_vec.push(FullDataEnum::MD5);
-    println!("{:?}", my_vec );//for debuging
     my_vec
 
 }

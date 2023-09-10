@@ -5,6 +5,7 @@ use std::env;
 use std::error::Error;
 use md5::{Md5, Digest};
 use csv::WriterBuilder;
+use strum::IntoEnumIterator;
 use std::io::BufWriter;
 use std::path::{PathBuf, Path};
 use crate::FullData;
@@ -12,7 +13,12 @@ use crate::full_data_struct::{FullDataEnum, FullDataTrait};
 
 #[inline(always)]
 pub fn data_save_manager(full_data: &[FullData],columns_config_vec: &[FullDataEnum]) -> Result<PathBuf, Box<dyn Error>>{
-    write_main_data_csv_new(full_data,columns_config_vec)
+    if let Ok(data_path) = write_main_data_csv(full_data,"data\\data.csv") {
+        if let Ok(results_path) = write_results_csv(full_data,columns_config_vec,"results.csv") {
+            return Ok(results_path);
+        }
+    }
+    Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, "Failed to save data!!!")))
 }
 
 #[inline(always)]
@@ -77,12 +83,33 @@ pub fn write_serde_to_csv(data: &[FullData]) -> Result<(), Box<dyn Error>> {
     writer.flush()?;
     Ok(())
 }
-
 #[inline(always)]
-fn write_main_data_csv_new(full_data: &[FullData],columns_config_vec: &[FullDataEnum]) -> Result<PathBuf, Box<dyn Error>> {
+fn write_main_data_csv(full_data: &[FullData],main_data_path:&str) -> Result<PathBuf, Box<dyn Error>> {
     create_data_dir()?;
     let mut file_path = env::current_dir()?;
-    file_path.push("data\\data.csv");
+    file_path.push(main_data_path);
+    let file = File::create(&file_path)?;
+    let mut writer = csv::Writer::from_writer(BufWriter::new(file));
+    // Write the header row
+    let mut headers = Vec::new();
+    for column in FullDataEnum::iter() {
+        headers.push(format!("{:?}", column));
+    }
+    writer.write_record(&headers)?;
+
+    for data in full_data {
+        writer.write_record(&FullDataEnum::iter().map(|column| data.get_string(&column)).collect::<Vec<String>>())?;
+    }
+    
+    //return that full file path
+    Ok(file_path)
+}
+
+#[inline(always)]
+fn write_results_csv(full_data: &[FullData],columns_config_vec: &[FullDataEnum],results_data_path:&str) -> Result<PathBuf, Box<dyn Error>> {
+    create_data_dir()?;
+    let mut file_path = env::current_dir()?;
+    file_path.push(results_data_path);
     let file = File::create(&file_path)?;
     let mut writer = csv::Writer::from_writer(BufWriter::new(file));
     // Write the header row
@@ -96,10 +123,5 @@ fn write_main_data_csv_new(full_data: &[FullData],columns_config_vec: &[FullData
         writer.write_record(&columns_config_vec.iter().map(|column| data.get_string(column)).collect::<Vec<String>>())?;
     }
     
-    //for now we do a copy later will be much more
-    let src_file = Path::new("data\\data.csv");
-    let dest_file = Path::new("results.csv");
-    fs::copy(src_file, dest_file)?;
-    //return that full file path
     Ok(file_path)
 }

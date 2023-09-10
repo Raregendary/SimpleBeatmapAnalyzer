@@ -1,4 +1,4 @@
-use std::{io::{self, Write, BufWriter}, fs::{self, File}, str::FromStr};
+use std::{io::{Write, BufWriter}, fs::{self, File}, str::FromStr};
 use crate::full_data_struct::FullDataEnum;
 use std::path::Path;
 use strum::IntoEnumIterator;

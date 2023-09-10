@@ -80,6 +80,7 @@ pub trait FullDataTrait {
 }
 
 impl FullDataTrait for FullData {
+    #[inline(always)]
     fn get_string(&self, field: &FullDataEnum) -> String {
         match field {
             FullDataEnum::Title => self.title.to_string(),
@@ -190,7 +191,7 @@ pub enum FullDataEnum {
 }
 impl FromStr for FullDataEnum {
     type Err = ();
-
+    #[inline(always)]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "Title" => Ok(FullDataEnum::Title),

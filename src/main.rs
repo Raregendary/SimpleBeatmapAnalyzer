@@ -18,8 +18,8 @@ mod full_data_struct;
 use full_data_struct::{FullData, FullDataEnum};
 use crate::savedata_manager::{read_main_data_csv, data_save_manager};
 
-mod config_manager;
-use config_manager::init_config;
+mod columns_config_manager;
+use columns_config_manager::init_config;
 
 #[inline(always)]
 fn find_osu_files6(path: String) -> Result<Vec<String>, io::Error> {

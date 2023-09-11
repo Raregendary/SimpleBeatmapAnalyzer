@@ -141,7 +141,7 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) ->
         }
     } 
     if counter_one_twoth >= 2{
-        jumps_counter+=1;
+        jumps_counter+=counter_one_twoth+1;
         if counter_one_twoth <= 10{
             n_short += counter_one_twoth + 1;
         }

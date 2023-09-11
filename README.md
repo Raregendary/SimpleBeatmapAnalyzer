@@ -1,5 +1,6 @@
 ![banner](https://github.com/Raregendary/SimpleBeatmapAnalyzer/assets/71941668/2ef72068-7cc7-4c05-bb12-a5ee62e84d08)
 
+* ### KNOWN BUG - AVG JUMP DISTANCE AND AVG JUMP SPEED NOT PROPERLY CALCULATED FOR LAST PATTERN OF THE MAP - WILL BE FIXED IN v0.9.2
 
 # What is Simple Beatmap Analyzer?
 ###### This is my first rust program

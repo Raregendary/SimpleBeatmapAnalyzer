@@ -12,15 +12,24 @@ use crate::FullData;
 use crate::full_data_struct::{FullDataEnum, FullDataTrait};
 
 #[inline(always)]
-pub fn data_save_manager(full_data: &[FullData],columns_config_vec: &[FullDataEnum]) -> Result<PathBuf, Box<dyn Error>>{
+pub fn data_save_manager(full_data: &[FullData],columns_config_vec: &[FullDataEnum],options_config_path: String) -> Result<PathBuf, Box<dyn Error>>{
     if let Ok(data_path) = write_main_data_csv(full_data,"data\\data.csv") {
+        copy_options_config(options_config_path).unwrap_or_else(|_| {
+            println!("Failed to save options config!!!");
+        });
         if let Ok(results_path) = write_results_csv(full_data,columns_config_vec,"results.csv") {
             return Ok(results_path);
         }
     }
     Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, "Failed to save data!!!")))
 }
-
+#[inline(always)]
+fn copy_options_config(options_config_path: String) -> Result<(), Box<dyn Error>> {
+    let from = &options_config_path;
+    let to = format!("data\\{}", &options_config_path);
+    fs::copy(from, to)?;
+    Ok(())
+}
 #[inline(always)]
 pub fn read_main_data_csv() -> Result<Vec<FullData>, Box<dyn Error>> {
     let file = File::open("data\\data.csv")?;
@@ -60,15 +69,21 @@ fn apply_dt_to_ar(original_ar: f32) -> f32 {
     };
     new_ar
 }
-#[allow(dead_code)]
+
 #[inline(always)]
 pub fn calculate_md5(file_path: &str) -> String {
-    let f = File::open(file_path).unwrap();
+    let f = match File::open(file_path) {
+        Ok(file) => file,
+        Err(_) => return String::new(),
+    };
     let mut reader = BufReader::new(f);
     let mut hasher = Md5::new();
     let mut buffer = [0; 1024];
     loop {
-        let count = reader.read(&mut buffer).unwrap();
+        let count = match reader.read(&mut buffer) {
+            Ok(count) => count,
+            Err(_) => return String::new(),
+        };
         if count == 0 {
             break;
         }

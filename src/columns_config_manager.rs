@@ -3,7 +3,7 @@ use crate::full_data_struct::FullDataEnum;
 use std::path::Path;
 use strum::IntoEnumIterator;
 #[inline(always)]
-pub fn init_config(path: String)  -> Vec<FullDataEnum> {
+pub fn init_columns_config(path: String)  -> Vec<FullDataEnum> {
 //
     let path: &Path = Path::new(&path);
     if !path.exists() {
@@ -54,6 +54,6 @@ fn write_enum_to_file(path: &Path) -> std::io::Result<()> {
     Ok(())
 }
 #[inline(always)]
-fn get_all_enum_values() -> Vec<FullDataEnum> {
+pub fn get_all_enum_values() -> Vec<FullDataEnum> {
     FullDataEnum::iter().collect()
 }

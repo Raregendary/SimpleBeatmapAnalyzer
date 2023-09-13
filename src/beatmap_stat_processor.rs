@@ -2,7 +2,7 @@ use std::{collections::HashMap, error::Error};
 use rosu_pp::{beatmap::TimingPoint, parse::HitObject};
 
 #[inline(always)]
-pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32) -> Result<SongParams, Box<dyn Error>> {
+pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32,stream_spacing: f32,jump_spacing: f32) -> Result<SongParams, Box<dyn Error>> {
     //first circle is not considered anything, also for sliders only the initial circle is calculated/counted
     if xyt.len() <= 3 || sorted_bpms.len() == 0 {/*skip maps with less than 3 elements xD and no timing points */return Err("map too short".into())}
     let mut beatmap_playable_length = 0.0;

@@ -97,6 +97,7 @@ The values for the following **1/4** and **1/2** sections are in % notes of the 
 1. [x] ~~Make it so you need to compute once the map and not every time you run the program~~ **v0.9.1**
 1. [x] ~~Include 100+ note stream counter ~~ **v0.9.1**
 1. [x] ~~Make Longest stream counter~~ **v0.9.1**
+1. [] Long term idea - Create a faster osu Standard only beatmap parser.
 ## F.A.Q.
 1. Why does it run slow ?
 	* The program needs to search for all your ".osu" files and then parse all of them to calculate alot of metrics. Most of the time is taken by [ROSU-PP](https://github.com/MaxOhn/rosu-pp) to calculate difficulty and pp for the maps aswel as reading from the disc and parsing. This program scales very well with fast SSD storage and alot of cores *(on my r5 3600x with 860Evo ssd its 2500 maps per second)*

@@ -1,6 +1,6 @@
 [package]
 name = "SimpleBeatmapAnalyzer"
-version = "0.9.1"
+version = "0.9.2"
 edition = "2021"
 authors = ["Raregendary <raregendary@gmail.com>"]
 license = "MIT"

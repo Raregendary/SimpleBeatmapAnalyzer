@@ -10,6 +10,7 @@ use savedata_manager::calculate_md5;
 use jwalk::WalkDir as wd;
 use rayon::prelude::*;
 use rosu_pp::{Beatmap, BeatmapExt,GameMode};
+use std::fs::File;
 use std::hash::Hash;
 use std::io::Write;
 use std::{collections::HashSet, io};
@@ -52,6 +53,8 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
         println!("Found {} osu beatmaps.\nProcessing Osu! Standard beatmaps:",files.len());
         let start = Instant::now();
         let new_data = data_processor(&files,already_processed,options);
+
+        
         let duration = start.elapsed();
         println!("Processed {} Osu! Standard beatmaps in: {:?}\t({} beatmaps per second)",new_data.len(), duration,new_data.len() / duration.as_secs().max(1) as usize);
         let mut merged_data = Vec::new();
@@ -62,6 +65,11 @@ fn process_beatmaps(songs_path:String,already_processed: &HashSet<String>,old_da
         else {
             merged_data.extend(new_data)
         }
+        //test
+        let encoded: Vec<u8> = bincode::serialize(&merged_data).unwrap();
+        let mut file = File::create("beatmaps.bin").unwrap();
+        file.write_all(&encoded).unwrap();
+        //end of test
         if let Ok(path) = data_save_manager(&merged_data,&columns_config_vec,options_config_path){
             println!("CSV file saved successfuly ->\t{}",path.to_str().unwrap());
         } else {

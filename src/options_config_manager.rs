@@ -3,9 +3,8 @@ use crate::full_data_struct::FullDataEnum;
 use std::path::Path;
 use strum::IntoEnumIterator;
 #[inline(always)]
-pub fn init_options_config(path: String)  -> OptionsConfig {
-//
-    let path: &Path = Path::new(&path);
+pub fn init_options_config(file_path: String)  -> OptionsConfig {
+    let path: &Path = Path::new(&file_path);
     if !path.exists() {
         if let Ok(_) = write_options_config_file(path) {
             println!("Successfully created options config file! (loading defaults)");
@@ -13,8 +12,10 @@ pub fn init_options_config(path: String)  -> OptionsConfig {
             println!("Note that changing anything in it will require full data recalculation!!!");
         }
         else{
-            println!("Failed to create optionsconfig file (loading defaults), please restart the program if you want your values to be used!!!");
-            return get_default_options();
+            if !file_path.contains("data\\"){
+                println!("Failed to create optionsconfig file (loading defaults), please restart the program if you want your values to be used!!!");
+                return get_default_options();
+            }
         }
     }
     read_config(&path)
@@ -78,4 +79,27 @@ pub struct OptionsConfig {
     pub file_path: String,
     pub min_stream_distance: f32,
     pub min_jump_distance: f32,
+}
+
+pub struct OptionsConfigComparedBools{
+    pub are_stream_distance_the_same: bool,
+    pub are_jump_distance_the_same: bool,
+}
+pub trait ExactlyTheSame {
+    fn are_the_same(&self) -> bool;
+}
+
+impl ExactlyTheSame for OptionsConfigComparedBools {
+    #[inline(always)]
+    fn are_the_same(&self) -> bool {
+        self.are_stream_distance_the_same && self.are_jump_distance_the_same
+    }
+}
+#[inline(always)]
+pub fn compare_options_config(old_config: &OptionsConfig, new_config: &OptionsConfig) -> OptionsConfigComparedBools {
+    let tolerance = 1e-2; // 0.01
+    OptionsConfigComparedBools { 
+        are_stream_distance_the_same: (old_config.min_stream_distance-new_config.min_stream_distance).abs() < tolerance,
+        are_jump_distance_the_same: (old_config.min_jump_distance-new_config.min_jump_distance).abs() < tolerance,    
+    }
 }

@@ -1,5 +1,6 @@
 use std::{collections::HashMap, error::Error};
 use rosu_pp::{beatmap::TimingPoint, parse::HitObject};
+use serde::{Serialize, Deserialize};
 
 #[inline(always)]
 pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32,stream_spacing: f32,jump_spacing: f32) -> Result<SongParams, Box<dyn Error>> {
@@ -183,7 +184,7 @@ pub fn process_stats(sorted_bpms: &[TimingPoint], xyt: &[HitObject], cs: f32,str
         }
     )
 } 
-#[derive(Debug,Clone)]
+#[derive(Debug,Clone,Serialize,Deserialize)]
 pub struct SongParams {
     pub playable_length: i32,
     pub bpm: i32,           // most common bpm
@@ -204,6 +205,32 @@ pub struct SongParams {
     pub avg_jump_distance: u32, // Average distance between jumps in pixels
     pub avg_jump_speed: u32, // Average speed of jumps in ms
 }
+impl SongParams {
+    #[inline(always)]
+    pub fn new_initialized() -> Self {
+        Self {
+            playable_length: 0,
+            bpm: 0,
+            doubles: 0.0,
+            triples: 0.0,
+            bursts: 0.0,
+            streams: 0.0,
+            deathstreams: 0.0,
+            short_jumps: 0.0,
+            mid_jumps: 0.0,
+            long_jumps: 0.0,
+            quads: 0.0,
+            fcdbi: 0.0,
+            si: 0.0,
+            ji: 0.0,
+            longest_stream: 0,
+            streams100: 0,
+            avg_jump_distance: 0,
+            avg_jump_speed: 0,
+        }
+    }
+}
+
 #[allow(dead_code)]
 #[inline(always)]
 fn most_common(v: &[i32]) -> i32 {

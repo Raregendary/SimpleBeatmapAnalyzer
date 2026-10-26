@@ -1,116 +1,317 @@
-![banner](https://github.com/Raregendary/SimpleBeatmapAnalyzer/assets/71941668/2ef72068-7cc7-4c05-bb12-a5ee62e84d08)
+# Simple Beatmap Analyzer
 
-* ### v0.9.3 might take a while, i want to rewrite half the program 😊
+A Rust **library and CLI** for turning osu! beatmaps into advanced statistics:
+stars and pp for NM/DT/HR, BPM and object counts, and a stream/jump pattern
+analysis (bursts, streams, deathstreams, jumps, 1/3 snaps, SI/JI/FCDBI).
 
-# What is Simple Beatmap Analyzer?
-###### This is my first rust program
-Simple Beatmap Analyzer is a console application that analyzes ".osu" files for Standard game mode only. After it finishes it outputs the results in a "CSV" *(comma,separated,values)* file in the same directory as the .exe
-# Table of Contents
-1. [How does it work](#how-does-it-work)
-1. [How to install](#how-to-install)
-1. [How to use it](#how-to-use-it)
-1. [How to load results.csv in Excel](#how-to-load-resultscsv-in-excel)
-1. [How to analyze the data in Excel](#how-to-analyze-the-data-in-excel)
-1. [To Do](#to-do)
-1. [F.A.Q](#faq)
+The project is split so that other tools — a GUI, a website, a discord bot —
+can depend on the analysis core without re-implementing (or copying) any of the
+math:
 
+| Component | Crate | Purpose |
+|---|---|---|
+| **Library** | `simple_beatmap_analyzer` | Parsing, statistics, batch scanning, cache, CSV/JSON-ready data |
+| **CLI** | `sba` | Analyze a file or a Songs folder and write CSV/JSON |
 
-# How does it work
-It assumes every map is in maped **1/4** and calculates streams/jumps and other patterns aswel as some ratios based on them *(Jumps are asumed every second beat and i will be refering to it as 1/2)*.
-The values for the following **1/4** and **1/2** sections are in % notes of the map, not in time.
-* For **1/4** patterns we assume the circles are overlapping or up to 16 pixels edge to edge.
-* For **1/2** patterns we asume the edge to edge space is higher than 110 pixels
-1. **1\4** patterns:
-	* *Dobules/Triples/Quads/Bursts/Streams/DeathStreams*
-	* Bursts:      **3-12** *includes Triples and Quads*
-	* Streams:	**13-32**
-	* DeathStreams: **33+**
-1. **1\2** patterns:
-	* *ShortJumps/MidJumps/LongJumps*
-	* ShortJumps:  **3-12**
-	* MidJumps: **13-32**
-	* LongJumps: **33+**
-1. **SI** -> Stream index *(how streamy the map is minus jumps)*
-1. **JI** -> Jump index *(how jumpy the map is minus streams)*
-1. **FCDBI** -> Finger Control Double Bursts Index *(experimental)*
-1. Additionals stats like 99% acc PP for NM/DT/HR aswel as Stars for said mods and others... *wont list em all*
-# How to install
-1. Click on releases and download the latest version.
-1. Unzip into a folder of your choice.
+`rosu-pp` performs `.osu` parsing and the difficulty/performance calculations;
+everything else is implemented here and returns plain, serialisable structs.
 
-# How to use it
-1. Open the **SimpleBeatmapAnalyzer.exe**
-1. Paste the Osu Songs path *(example: D:\osu\Songs)* and click Enter
-1. Wait for it to finish and save the data in **results.csv**
-1. Open the results.csv in Excel or any other CSV reader/analyzer
-1. After you find the map you like simply copy the **MapID** and paste it in the Osu search ingame
-
-# How to load results.csv in Excel
-#### Method 1
-1. Open a new excel document.
-1. Chose the menu **Data** and from there click **From Text/CSV**
-1. Select the **results.csv** and click **Open**
-1. After then on the first drop down menu select **65001: Unicode (UTF-8)** if its not auto selected
-1. Make sure the delimiter is **Comma** and press **Load**
 ---
-#### Method 2
-1. If in windows your default delimiter is "," and not "." open the csv with Excel
-1. Chose the menu **Insert** and from there click **Table**
-1. It should auto detect the scope of your table, if not manualy select it
-1. Enable **My table has headers** checkbox and press **Ok**
 
-# How to analyze the data in Excel
-#### Example 1: Most Streamy 7\*  Beatmaps from 210 to 220 BPM with more than 20% Bursts
-1.  Chose the menu **Data** and enable **Filter** if its not enabled.
-	* On the clomns you gonna see a drop down arrow
-1. Click the arrow on **BPM**->**Number filters**->**Between..**
-	* On the first enter **210** and on the second **220**
-1. Click the arrow on **Stars**->**Number filters**->**Between..**
-	* On the first enter **7** and on the second **8**
-1. Click the arrow on **Bursts**->**Number filters**->**Greater Than..**
-	* On the first enter **20**
-1. Click the arrow on **SI**->**Sort Largest to Smallest**
+## Install
+
+```bash
+# CLI from a checkout
+cargo install --path .
+
+# or run without installing
+cargo run --release -- --help
+```
+
+The library is consumed as a normal path (or git) dependency:
+
+```toml
+[dependencies]
+simple-beatmap-analyzer = { path = "../SimpleBeatmapAnalyzer" }
+```
+
+Requires a recent stable Rust toolchain (edition 2021).
+
 ---
-#### Example 2: Most Jumpy 6\* DT Beatmaps with no Streams and Deathstreams that are 10.33 AR
-1.  Chose the menu **Data** and enable **Filter** if its not enabled.
-	* On the clomns you gonna see a drop down arrow
-1. Click the arrow on **DT_Stars**->**Number filters**->**Between..**
-	* On the first enter **6** and on the second **7**
-1. Click the arrow on **Streams**->**Number filters**->**Equals..**
-	* On the first enter **0**
-1. Click the arrow on **DeathStreams**->**Number filters**->**Equals..**
-	* On the first enter **0**
-1. Click the arrow on **DT_AR**->**Number filters**->**Equals..**
-	* On the first enter **10.33**
-1. Click the arrow on **JI**->**Sort Largest to Smallest**
 
-# To Do:
-1. [x] ~~Create a column config file.~~ **v0.9.1**
-1. [ ] Create a options config file.
-1. [ ] Add counter for cut streams
-1. [x] ~~Calculate AVG jump Spacing and AVG jump Distance~~ **v0.9.1**
-1. [ ] Option to be able to generate Osu links and Osu Direct links
-1. [ ] Expose variables as the stream distance and jump distance for editing in the config
-1. [ ] Maybe add optinal support for 1/3 or 1/6th or other uncomon Snap Divisors **(prob wont)**
-1. [ ] Figure out a way to have an indicator if the map is ranked/loved/qualified/graveyarded
-	* That doesnt require everyone to use thier APIv1 key.
-1. [x] ~~Make it so you need to compute once the map and not every time you run the program~~ **v0.9.1**
-1. [x] ~~Include 100+ note stream counter ~~ **v0.9.1**
-1. [x] ~~Make Longest stream counter~~ **v0.9.1**
-1. [] Long term idea - Create a faster osu Standard only beatmap parser.
-## F.A.Q.
-1. Why does it run slow ?
-	* The program needs to search for all your ".osu" files and then parse all of them to calculate alot of metrics. Most of the time is taken by [ROSU-PP](https://github.com/MaxOhn/rosu-pp) to calculate difficulty and pp for the maps aswel as reading from the disc and parsing. This program scales very well with fast SSD storage and alot of cores *(on my r5 3600x with 860Evo ssd its 2500 maps per second)*
-1. When i load the data in Excel the numeric columns like Stars are text ?
-	* This can happen for many reasons one being wrong default delimiter in windows. Floating point numbers would expect "," instead of "." . To fix it i know two ways:
-		* **Language Settings** -> **Region** -> **Regional format** *(English(Europe) works)*. And then reset Excel.
-		* Or in Excel you can mark the column click **Home** around the middle there is a drop down menu usualy writen **General** Switch to: **Number** then go to **Data** and click **Text to Columns** *(should be somewhere on the right)*
+## Library usage
+
+```rust
+use simple_beatmap_analyzer::{
+    analyze_file, analyze_paths, find_beatmaps, AnalyzeOptions,
+};
+
+fn main() -> Result<(), simple_beatmap_analyzer::Error> {
+    let options = AnalyzeOptions::default();
+    let analysis = analyze_file("map.osu", &options)?;
+
+    println!(
+        "{} [{}] — {:.2}★, {:.2}pp, {:.0} BPM",
+        analysis.metadata.title,
+        analysis.metadata.version,
+        analysis.difficulty.stars_nm,
+        analysis.difficulty.pp_nm,
+        analysis.timing.bpm,
+    );
+
+    if let Some(patterns) = &analysis.patterns {
+        println!(
+            "streams {:.2}% | jumps {:.2}% | longest stream {} | SI {:.2}",
+            patterns.stream_pct(),
+            patterns.jump_pct(),
+            patterns.longest_stream,
+            patterns.si,
+        );
+    }
+
+    // Batch: every .osu file below a folder, analyzed in parallel.
+    let paths = find_beatmaps("Songs")?;
+    let outcome = analyze_paths(&paths, &options, None);
+    println!(
+        "{} analyzed, {} failed",
+        outcome.analyzed(),
+        outcome.errors.len()
+    );
+
+    Ok(())
+}
+```
+
+The public surface is intentionally small:
+
+* `analyze_file` / `analyze_bytes` → `Analysis`
+* `find_beatmaps` / `analyze_paths` → `BatchOutcome`
+* `Cache` for incremental runs
+* `write_csv` / `write_csv_to_path` with `Column` selection
+* `parse_metadata` for tools that need metadata without a full parse
+
+All result types implement `serde::Serialize`/`Deserialize`, so they can be sent
+over a channel, stored, or printed as JSON without conversion.
+
+### Analysis structure
+
+```
+Analysis
+├─ metadata    title, artist, creator, difficulty name, BeatmapID, BeatmapSetID,
+│              mode, format version, audio filename, tags
+├─ timing      BPM (duration-weighted), BPM min/max, DT BPM,
+│              playable length, circle/slider/spinner/object counts
+├─ difficulty  CS/AR/OD/HP, NM/DT/HR stars and pp, max combo,
+│              DT_AR/DT_OD, HR_AR/HR_OD/HR_CS/HR_HP
+└─ patterns    Option<PatternStats> — standard mode and 4+ objects only
+```
+
+---
+
+## CLI usage
+
+```text
+sba <PATH> [OPTIONS]
+```
+
+`PATH` may be a single `.osu` file or a folder (searched recursively).
+
+```bash
+# One map, CSV on stdout
+sba "Songs/Artist - Title/map.osu"
+
+# A whole library
+sba "D:/osu/Songs" -o results.csv --cache data/sba-cache.bin
+
+# Pick columns
+sba Songs --columns Title,DifName,Stars,Streams,JumpNotes,SI
+
+# JSON for another tool
+sba Songs -f json -o analyses.json
+
+# Include taiko/catch/mania maps as well
+sba Songs --all-modes
+```
+
+| Option | Meaning |
+|---|---|
+| `-o, --output <FILE>` | Output file; `-` means stdout. Default: stdout for a single file, `results.csv` for a folder. |
+| `-f, --format csv\|json` | Output format (default `csv`). |
+| `--columns <LIST>` | CSV columns, comma separated. Default: every column. |
+| `--list-columns` | Print all column names. |
+| `--stream-distance <PX>` | Max edge-to-edge spacing for 1/4 patterns (default `16`). |
+| `--jump-distance <PX>` | Min edge-to-edge spacing for 1/2 jumps (default `110`). |
+| `--accuracy <PCT>` | Accuracy used for NM/DT/HR pp (default `99`). |
+| `--cache <FILE>` | Reuse analyses from a cache file. |
+| `--no-progress` | Disable the progress bar. |
+| `--all-modes` | Keep non-standard maps in the output. |
+| `-h, --help` / `-V, --version` | Help / version. |
+
+Exit codes: `0` success, `1` at least one file failed to analyze, `2` usage or
+configuration error.
+
+### Default CSV columns
+
+```
+Path, Title, Artist, Creator, DifName, MapID, MapSetID, Mode, MD5,
+Stars, DT_Stars, HR_Stars, NM_99, DT_99, HR_99, MaxCombo,
+CS, AR, OD, HP, DT_AR, DT_OD, HR_AR, HR_OD, HR_CS, HR_HP,
+BPM, DT_BPM, BPM_Min, BPM_Max, PlayableLength,
+Circles, Sliders, Spinners, Objects,
+Doubles, Triples, Quads, Bursts, Streams, DeathStreams, LongestStream,
+Streams100, ShortJumps, MidJumps, LongJumps, JumpNotes,
+AvgJumpsDistance, AvgJumpsSpeed, OneThird, SI, JI, FCDBI,
+OsuDirect, OsuWebLink
+```
+
+Star/pp/percentage/attribute values use two decimals. Pattern cells are empty
+for maps without pattern statistics (non-standard modes, three or fewer hit
+objects). `Doubles`/`Triples`/`Quads`/`Bursts`/`Streams`/`DeathStreams`/
+`ShortJumps`/`MidJumps`/`LongJumps`/`OneThird` are percentages of hit objects,
+while `LongestStream`, `Streams100` and `JumpNotes` are counts.
+`OsuDirect` and `OsuWebLink` are Excel `HYPERLINK` formulas and are empty when
+the map has no BeatmapID.
+
+
+---
+
+## What is measured
+
+### Streams and bursts (1/4 patterns)
+
+Consecutive notes are grouped when the edge-to-edge distance between their
+centres (after subtracting the CS circle diameter) is at most
+`stream_distance` **and** the spacing is a 1/4 snap
+(`0.9 < dt / (beat_len / 4) < 1.1`).
+
+| Run (notes) | Bucket |
+|---:|---|
+| 2 | doubles |
+| 3 | triples |
+| 4 | quads |
+| 3–11 | bursts (includes triples and quads) |
+| 12–32 | streams |
+| 33+ | deathstreams |
+
+`LongestStream` is the longest 1/4 run and `Streams100` counts runs of at least
+100 notes. A run that reaches the last object of the map is counted (the 0.9.x
+"last pattern" fix).
+
+### Jumps (1/2 patterns)
+
+A note is part of a jump when the edge-to-edge distance is greater than
+`jump_distance` **and** the spacing is a 1/2 snap
+(`1.9 < dt / (beat_len / 4) < 2.1`). Runs are measured in notes:
+
+| Run (notes) | Bucket |
+|---:|---|
+| 2–12 | short jumps |
+| 13–32 | mid jumps |
+| 33+ | long jumps |
+
+Averages use only the moves that were actually measured, so
+`AvgJumpsDistance`/`AvgJumpsSpeed` are true means (0.9.x divided by an inflated
+counter).
+
+### 1/3 snaps
+
+Notes whose ratio is between `1.25` and `1.45` are counted as `OneThird`,
+regardless of spacing.
+
+### Indices
+
+```
+jump_value   = short + 1.5*mid + 2.0*long
+stream_value = bursts + 1.5*streams + 2.0*deathstreams
+SI    = (stream_value - jump_value - 0.5*doubles) / notes
+JI    = (jump_value - stream_value - 0.5*doubles) / notes
+FCDBI = (bursts - triples - quads + 1.75*doubles + 1.5*triples + 1.75*quads
+         - jump_value - 1.35*streams - 1.7*deathstreams) / notes
+```
+
+All percentages are percentages of **hit objects**, not of the map duration.
+Slider bodies are not walked; only object head positions are used, matching the
+original analyzer.
+
+### Other statistics
+
+| Field | Definition |
+|---|---|
+| `BPM` | Most common BPM, weighted by how long each timing section is active (not by note count). |
+| `BPM_Min` / `BPM_Max` | Range of uninherited timing points. |
+| `PlayableLength` | Seconds from the first object to the end of the last object (sliders/spinners use their end time). |
+| `Objects` | Total hit objects; `Circles`/`Sliders`/`Spinners` are the per-type counts. |
+| `NM_99`/`DT_99`/`HR_99` | pp at the configured accuracy with no mods / Double Time / Hard Rock. |
+| `MaxCombo` | Maximum combo from the NM difficulty calculation. |
+
+---
+
+## Caching
+
+The cache is keyed by `(md5 of the .osu file, analysis options, algorithm
+version)`:
+
+* changing `--stream-distance`, `--jump-distance` or `--accuracy` recomputes
+  only what is affected;
+* moving or renaming a file reuses the analysis (the path is not part of the
+  key);
+* an algorithm change (`ANALYZER_VERSION`) invalidates old entries;
+* the cache stores statistics only — never parsed beatmaps — so it stays small
+  (a few KB for a handful of maps, well under 1 KB per map).
+
+The cache is opt-in via `--cache`; the library works without one. When a cache
+file is corrupt or was written by an incompatible version, the CLI warns and
+starts with an empty cache instead of aborting.
+
+---
+
+## Migrating from 0.9.x
+
+The 0.9.x application was a CSV-only binary with `columns_config.txt` and
+`options_config.txt`. 0.10 moves the logic into a library and replaces the
+configuration files with typed API values and CLI flags:
+
+| 0.9.x | 0.10 |
+|---|---|
+| `columns_config.txt` | `--columns` / `Column` API |
+| `options_config.txt` (`StreamDistance`, `JumpDistance`) | `--stream-distance`, `--jump-distance`, `AnalyzeOptions` |
+| `results.csv` always | `-o`, `--format csv\|json`, stdout default for a single map |
+| Interactive Songs-path prompt | `<PATH>` argument |
+| `data/data.csv` cache | `--cache <FILE>`; statistics-only, content-addressed |
+
+Behaviour changes that fix 0.9.x bugs:
+
+* `StreamDistance`/`JumpDistance` are actually used (0.9.x had them
+  hard-coded).
+* `BeatmapSetID` is parsed (0.9.x always wrote an empty column).
+* BPM is duration-weighted; playable length uses the last object's end time.
+* Jump averages divide by the moves they measured.
+* Paths are platform-neutral (no hard-coded `data\...`).
+* Deleted files are no longer resurrected from a cache: the output is built
+  from the files found in the current run.
+
+The legacy 0.9.x implementation and its architecture notes are preserved in
+[`docs/legacy-0.9.2-analysis.md`](docs/legacy-0.9.2-analysis.md).
+
+---
+
+## Development
+
+```bash
+cargo test --all-targets
+cargo run -- tests/fixtures --all-modes --columns Title,Stars,Streams,JI
+```
+
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the crate layout and design
+decisions and [`CHANGELOG.md`](CHANGELOG.md) for the version history.
+
 ## Credits
-[ROSU-PP](https://github.com/MaxOhn/rosu-pp) - Beatmap parsing and Difficulty/PP calculations
+
+* [rosu-pp](https://github.com/MaxOhn/rosu-pp) — `.osu` parsing, difficulty and
+  performance calculation.
+* Algorithm and original 0.9.x application: Raregendary.
+
 ## Licence
-[MIT](https://www.mit.edu/~amini/LICENSE.md)
 
-## Fixed Bugs:
-1. **LAST PATTERN OF THE MAP IS NOT BEING CALCULATED => FIXED IN V0.9.1**
+[MIT](LICENSE)
 
-[back to the top](#what-is-simple-beatmap-analyzer)

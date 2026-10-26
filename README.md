@@ -219,6 +219,10 @@ Detection is movement-based: the object before the first jump move of a run is
 part of the run's note count, so a 20-move jump sequence reports 21 notes. This
 matches the original analyzer and keeps `ShortJumps` comparable with `Streams`.
 
+For consumers that use the GUI's `<8` / `>=8` split, `PatternStats` also exposes
+`jump_notes_under_8` and `jump_notes_8_plus` with
+`short_jump_pct_under_8()` / `long_jump_pct_8_plus()`.
+
 Averages use only the moves that were actually measured, so
 `AvgJumpsDistance`/`AvgJumpsSpeed` are true means (0.9.x divided by an inflated
 counter).

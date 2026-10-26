@@ -78,6 +78,12 @@ fn standard_fixture_produces_expected_patterns() {
     assert_eq!(patterns.mid_jump_notes, 21);
     assert_eq!(patterns.long_jump_notes, 0);
     assert_eq!(patterns.jump_notes(), 21);
+    assert_eq!(patterns.jump_notes_under_8, 0);
+    assert_eq!(patterns.jump_notes_8_plus, 21);
+    assert_eq!(
+        patterns.jump_notes(),
+        patterns.jump_notes_under_8 + patterns.jump_notes_8_plus
+    );
 
     assert!((patterns.stream_pct() - 40.0).abs() < 0.01);
     assert!((patterns.burst_pct() - 16.0).abs() < 0.01);
@@ -105,6 +111,9 @@ fn options_change_the_pattern_detection() {
         .unwrap();
     assert_eq!(defaults.stream_notes, 0);
     assert_eq!(defaults.short_jump_notes, 8);
+    assert_eq!(defaults.jump_notes_under_8, 0);
+    assert_eq!(defaults.jump_notes_8_plus, 8);
+    assert!((defaults.long_jump_pct_8_plus() - 33.333).abs() < 0.01);
     assert!((defaults.avg_jump_distance - 150.04).abs() < 0.5);
 
     let wide = AnalyzeOptions {
@@ -117,6 +126,44 @@ fn options_change_the_pattern_detection() {
     assert_eq!(wide.short_jump_notes, 0);
     assert_eq!(wide.jump_notes(), 0);
     assert!((wide.stream_pct() - 66.666).abs() < 0.01);
+}
+
+#[test]
+fn gui_jump_split_is_reported() {
+    use rosu_pp::beatmap::TimingPoint;
+    use rosu_pp::parse::{HitObject, HitObjectKind, Pos2};
+
+    let objects: Vec<HitObject> = [
+        (100, 100, 1000),
+        (400, 300, 1250),
+        (100, 100, 1500),
+        (400, 300, 1750),
+    ]
+    .into_iter()
+    .map(|(x, y, start_time)| HitObject {
+        pos: Pos2 {
+            x: x as f32,
+            y: y as f32,
+        },
+        start_time: start_time as f64,
+        kind: HitObjectKind::Circle,
+    })
+    .collect();
+    let timing_points = [TimingPoint {
+        beat_len: 500.0,
+        time: 0.0,
+    }];
+
+    let patterns =
+        simple_beatmap_analyzer::detect_patterns(&objects, &timing_points, 4.0, 16.0, 110.0)
+            .expect("four objects are enough for pattern detection");
+
+    assert_eq!(patterns.total_notes, 4);
+    assert_eq!(patterns.short_jump_notes, 4);
+    assert_eq!(patterns.jump_notes_under_8, 4);
+    assert_eq!(patterns.jump_notes_8_plus, 0);
+    assert!((patterns.short_jump_pct_under_8() - 100.0).abs() < 0.01);
+    assert!((patterns.long_jump_pct_8_plus() - 0.0).abs() < 0.01);
 }
 
 #[test]

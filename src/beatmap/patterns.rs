@@ -51,6 +51,12 @@ pub struct PatternStats {
     pub mid_jump_notes: u32,
     /// Notes in 1/2 runs of 33 or more notes.
     pub long_jump_notes: u32,
+    /// Notes in 1/2 runs shorter than 8 notes (the `<8 = short` split used by
+    /// the GUI).
+    pub jump_notes_under_8: u32,
+    /// Notes in 1/2 runs of 8 or more notes (the `>=8 = long` split used by the
+    /// GUI).
+    pub jump_notes_8_plus: u32,
     /// Average edge-to-edge distance of every 1/2 jump, in pixels.
     pub avg_jump_distance: f32,
     /// Average jump speed (`1000 * distance / dt`), in pixels per second.
@@ -142,6 +148,22 @@ impl PatternStats {
     /// Percentage of notes in long jumps (33+ note 1/2 runs).
     pub fn long_jump_pct(&self) -> f32 {
         self.percent(self.long_jump_notes)
+    }
+
+    /// Percentage of notes in 1/2 runs shorter than 8 notes.
+    ///
+    /// This is the `short jumps` bucket used by the GUI, in addition to the
+    /// 2–12/13–32/33+ buckets above.
+    pub fn short_jump_pct_under_8(&self) -> f32 {
+        self.percent(self.jump_notes_under_8)
+    }
+
+    /// Percentage of notes in 1/2 runs of 8 or more notes.
+    ///
+    /// This is the `long jumps` bucket used by the GUI, in addition to the
+    /// 2–12/13–32/33+ buckets above.
+    pub fn long_jump_pct_8_plus(&self) -> f32 {
+        self.percent(self.jump_notes_8_plus)
     }
 
     /// Percentage of notes that are part of any jump run.
@@ -350,6 +372,12 @@ fn classify_quarter(stats: &mut PatternStats, notes: u32) {
 }
 
 fn classify_jump(stats: &mut PatternStats, notes: u32) {
+    if notes < 8 {
+        stats.jump_notes_under_8 += notes;
+    } else {
+        stats.jump_notes_8_plus += notes;
+    }
+
     if notes <= SHORT_JUMP_MAX {
         stats.short_jump_notes += notes;
     } else if notes <= MID_JUMP_MAX {

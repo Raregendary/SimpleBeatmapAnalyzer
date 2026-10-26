@@ -17,8 +17,9 @@ programs (the planned GUI), and the binary is a thin wrapper around it.
 * `Analysis` containing `BeatmapMetadata`, `TimingStats`, `DifficultyStats` and
   optional `PatternStats`.
 * Pattern statistics: doubles, triples, quads, bursts, streams, deathstreams,
-  longest stream, 100+ streams, short/mid/long jumps, total jump notes, average
-  jump distance/speed, 1/3 snap notes, SI, JI and FCDBI.
+  longest stream, 100+ streams, short/mid/long jumps, the GUI-compatible
+  `<8`/`>=8` jump split, total jump notes, average jump distance/speed, 1/3
+  snap notes, SI, JI and FCDBI.
 * Batch scanning (`find_beatmaps`, `analyze_paths`) with a deterministic order
   and Rayon parallelism.
 * Content-addressed, statistics-only `Cache` keyed by
@@ -27,7 +28,7 @@ programs (the planned GUI), and the binary is a thin wrapper around it.
 * `sba` CLI: files or folders, `--output`, `--format`, `--columns`,
   `--stream-distance`, `--jump-distance`, `--accuracy`, `--cache`,
   `--all-modes`, `--no-progress`, `--list-columns`.
-* 19 tests covering metadata, patterns, options, modes, CSV, cache, scanning and
+* 20 tests covering metadata, patterns, options, modes, CSV, cache, scanning and
   the CLI, with synthetic `.osu` fixtures.
 * `ARCHITECTURE.md` and this changelog; the old analysis moved to
   `docs/legacy-0.9.2-analysis.md`.

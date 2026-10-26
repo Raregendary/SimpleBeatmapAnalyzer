@@ -14,7 +14,13 @@ math:
 | **CLI** | `sba` | Analyze a file or a Songs folder and write CSV/JSON |
 
 `rosu-pp` performs `.osu` parsing and the difficulty/performance calculations;
-everything else is implemented here and returns plain, serialisable structs.
+everything else is implemented here and returns plain, serialisable structs. The
+`rosu-pp` usage is isolated in the `beatmap` layer, so the `rosu-pp-gemini` fork
+can be substituted without touching the CLI, cache or export code (see
+[`ARCHITECTURE.md`](ARCHITECTURE.md#switching-the-parserdifficulty-backend)).
+
+This repository is the library + CLI half of the planned split; the GUI is a
+separate project that depends on the library.
 
 ---
 
@@ -208,6 +214,10 @@ A note is part of a jump when the edge-to-edge distance is greater than
 | 2–12 | short jumps |
 | 13–32 | mid jumps |
 | 33+ | long jumps |
+
+Detection is movement-based: the object before the first jump move of a run is
+part of the run's note count, so a 20-move jump sequence reports 21 notes. This
+matches the original analyzer and keeps `ShortJumps` comparable with `Streams`.
 
 Averages use only the moves that were actually measured, so
 `AvgJumpsDistance`/`AvgJumpsSpeed` are true means (0.9.x divided by an inflated

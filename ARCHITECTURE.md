@@ -177,8 +177,8 @@ when a note no longer qualifies. Details and bucket definitions are in the
 * every run, including one that touches the last object, is flushed exactly
   once;
 * percentages divide by `hit_objects.len()`, so they always sum consistently;
-* jump averages divide by the number of qualifying jump moves, not by the note
-  count of the runs;
+* jump runs are movement-based: the object before the first jump move is part
+  of the run's note count, while averages divide by the measured moves;
 * only head positions are used; slider paths are not walked.
 
 ---

@@ -135,7 +135,7 @@ sba Songs --all-modes
 
 | Option | Meaning |
 |---|---|
-| `-o, --output <FILE>` | Output file; `-` means stdout. Default: stdout for a single file, `results.csv` for a folder. |
+| `-o, --output <FILE>` | Output file; `-` means stdout. Default: stdout for a single file, `results.csv` (CSV) or `results.json` (JSON) for a folder. |
 | `-f, --format csv\|json` | Output format (default `csv`). |
 | `--columns <LIST>` | CSV columns, comma separated. Default: every column. |
 | `--list-columns` | Print all column names. |

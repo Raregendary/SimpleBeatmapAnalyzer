@@ -207,7 +207,11 @@ pub fn detect_patterns(
         return None;
     }
 
-    if !stream_distance.is_finite() || !jump_distance.is_finite() {
+    if !stream_distance.is_finite()
+        || !jump_distance.is_finite()
+        || stream_distance < 0.0
+        || jump_distance < 0.0
+    {
         return None;
     }
 

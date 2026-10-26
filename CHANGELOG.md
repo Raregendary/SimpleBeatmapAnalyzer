@@ -27,7 +27,7 @@ programs (the planned GUI), and the binary is a thin wrapper around it.
 * `sba` CLI: files or folders, `--output`, `--format`, `--columns`,
   `--stream-distance`, `--jump-distance`, `--accuracy`, `--cache`,
   `--all-modes`, `--no-progress`, `--list-columns`.
-* 18 tests covering metadata, patterns, options, modes, CSV, cache, scanning and
+* 19 tests covering metadata, patterns, options, modes, CSV, cache, scanning and
   the CLI, with synthetic `.osu` fixtures.
 * `ARCHITECTURE.md` and this changelog; the old analysis moved to
   `docs/legacy-0.9.2-analysis.md`.

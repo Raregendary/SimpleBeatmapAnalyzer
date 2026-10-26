@@ -27,7 +27,8 @@ ARGS:
 
 OUTPUT:
     -o, --output <FILE>   Write to FILE (use - for stdout)
-                          Default: stdout for a single file, results.csv for a folder
+                          Default: stdout for one file, results.csv or
+                          results.json for a folder (depending on --format)
     -f, --format <FORMAT> csv (default) or json
         --columns <LIST>  Comma-separated columns, e.g. Title,Stars,Streams,SI
         --list-columns    Print every column name and exit
@@ -207,10 +208,16 @@ fn run_analysis(args: Args) -> Result<ExitCode, String> {
 }
 
 fn write_output(args: &Args, files: &[FileAnalysis], single_file: bool) -> Result<(), String> {
-    let target = args
-        .output
-        .clone()
-        .or_else(|| (!single_file).then(|| PathBuf::from("results.csv")));
+    let target = args.output.clone().or_else(|| {
+        if single_file {
+            None
+        } else {
+            Some(match args.format {
+                Format::Csv => PathBuf::from("results.csv"),
+                Format::Json => PathBuf::from("results.json"),
+            })
+        }
+    });
 
     match (args.format, target) {
         (Format::Csv, Some(path)) if path != Path::new("-") => {

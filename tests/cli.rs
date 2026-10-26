@@ -204,3 +204,25 @@ fn cli_lists_columns() {
     assert!(text.contains("DeathStreams"));
     assert!(text.contains("AvgJumpsDistance"));
 }
+
+#[test]
+fn cli_json_directory_default_writes_results_json() {
+    let dir = temp_dir("json_default");
+    let output = sba()
+        .current_dir(&dir)
+        .arg(fixtures())
+        .args(["--format", "json", "--no-progress"])
+        .output()
+        .unwrap();
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+
+    let target = dir.join("results.json");
+    assert!(target.is_file(), "results.json was not created");
+
+    let text = std::fs::read_to_string(&target).unwrap();
+    assert!(text.trim_start().starts_with('['));
+    assert!(text.contains("standard_50.osu"));
+
+    let _ = std::fs::remove_dir_all(dir);
+}

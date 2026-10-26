@@ -55,7 +55,7 @@ values, `SI` (stream index), `JI` (jump index), `FCDBI` (experimental finger-con
 | `src/main.rs` | 187 | Wiring: startup, config bootstrap, file discovery, Rayon processing loop, cache merge, save call, exit prompt. |
 | `src/osufile_reader.rs` | 51 | Hand-rolled line scanner that pulls `Title`, `Creator`, `Version`, `BeatmapID` (and, in theory, `BeatmapSetID`) out of the `.osu` text. |
 | `src/beatmap_stat_processor.rs` | 241 | The core algorithm: converts hit objects + timing points into pattern counts and indexes (`SongParams`). |
-| `src/full_data_struct.rs` | 744 | Row/cache model: `FullData` (v0.9.2 cache row), `SavableFullData` (HEAD cache row), the CSV column enum + `FromStr`, and ~240 lines of serde-friendly mirror types for `rosu_pp`'s parsed beatmap plus conversions both ways. |
+| `src/full_data_struct.rs` | 744 | Row/cache model: `FullData` (v0.9.2 cache row), `SavableFullData` (HEAD cache row), the CSV column enum + `FromStr`, and ~415 lines of serde-friendly mirror types for `rosu_pp`'s parsed beatmap plus conversions both ways. |
 | `src/columns_config_manager.rs` | 58 | Reads/writes `columns_config.txt` (`ColumnName=0|1`), returns an ordered `Vec<FullDataEnum>`. |
 | `src/options_config_manager.rs` | 105 | Reads/writes `options_config.txt` (`FilePath`, `StreamDistance`, `JumpDistance`) and compares old vs new settings. |
 | `src/savedata_manager.rs` | 100 | MD5 hashing, cache (de)serialisation, CSV writing, `data/` folder handling. |
